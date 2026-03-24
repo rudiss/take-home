@@ -86,6 +86,11 @@ export function AdSlotDetail({ id }: Readonly<Props>) {
       .catch(() => setRoleLoading(false));
   }, [id]);
 
+  const isListingPublisher =
+    roleInfo?.role === 'publisher' &&
+    !!roleInfo.publisherId &&
+    adSlot?.publisher?.id === roleInfo.publisherId;
+
   const handleBooking = async () => {
     if (!roleInfo?.sponsorId || !adSlot) return;
 
@@ -95,9 +100,9 @@ export function AdSlotDetail({ id }: Readonly<Props>) {
     try {
       const response = await fetch(`${API_URL}/api/ad-slots/${adSlot.id}/book`, {
         method: 'POST',
+        credentials: 'include',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          sponsorId: roleInfo.sponsorId,
           message: message || undefined,
         }),
       });
@@ -117,11 +122,12 @@ export function AdSlotDetail({ id }: Readonly<Props>) {
   };
 
   const handleUnbook = async () => {
-    if (!adSlot) return;
+    if (!adSlot || !isListingPublisher) return;
 
     try {
       const response = await fetch(`${API_URL}/api/ad-slots/${adSlot.id}/unbook`, {
         method: 'POST',
+        credentials: 'include',
         headers: { 'Content-Type': 'application/json' },
       });
 
@@ -198,8 +204,9 @@ export function AdSlotDetail({ id }: Readonly<Props>) {
             >
               {adSlot.isAvailable ? '● Available' : '○ Currently Booked'}
             </span>
-            {!adSlot.isAvailable && !bookingSuccess && (
+            {!adSlot.isAvailable && !bookingSuccess && isListingPublisher && (
               <button
+                type="button"
                 onClick={handleUnbook}
                 className="ml-3 text-sm text-[--color-primary] underline hover:opacity-80"
               >
@@ -278,12 +285,10 @@ export function AdSlotDetail({ id }: Readonly<Props>) {
             <p className="mt-1 text-sm text-green-700">
               Your request has been submitted. The publisher will be in touch soon.
             </p>
-            <button
-              onClick={handleUnbook}
-              className="mt-3 text-sm text-green-700 underline hover:text-green-800"
-            >
-              Remove Booking (reset for testing)
-            </button>
+            <p className="mt-3 text-xs text-green-700">
+              Only the listing publisher can mark this placement available again from their dashboard or this page
+              when signed in as that publisher.
+            </p>
           </div>
         )}
       </div>
