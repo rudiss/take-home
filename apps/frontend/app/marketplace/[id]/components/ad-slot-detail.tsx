@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { getAdSlot } from '@/lib/api';
 import { authClient } from '@/auth-client';
+import { logger } from '@/lib/utils';
 
 interface AdSlot {
   id: string;
@@ -32,6 +33,8 @@ interface RoleInfo {
   name?: string;
 }
 
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4291';
+
 const typeColors: Record<string, string> = {
   DISPLAY: 'bg-blue-100 text-blue-700',
   VIDEO: 'bg-red-100 text-red-700',
@@ -43,7 +46,7 @@ interface Props {
   id: string;
 }
 
-export function AdSlotDetail({ id }: Props) {
+export function AdSlotDetail({ id }: Readonly<Props>) {
   const [adSlot, setAdSlot] = useState<AdSlot | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -71,9 +74,7 @@ export function AdSlotDetail({ id }: Props) {
           setUser(sessionUser);
 
           // Fetch role info from backend
-          fetch(
-            `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4291'}/api/auth/role/${sessionUser.id}`
-          )
+          fetch(`${API_URL}/api/auth/role/${sessionUser.id}`)
             .then((res) => res.json())
             .then((data) => setRoleInfo(data))
             .catch(() => setRoleInfo(null))
@@ -92,17 +93,14 @@ export function AdSlotDetail({ id }: Props) {
     setBookingError(null);
 
     try {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4291'}/api/ad-slots/${adSlot.id}/book`,
-        {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            sponsorId: roleInfo.sponsorId,
-            message: message || undefined,
-          }),
-        }
-      );
+      const response = await fetch(`${API_URL}/api/ad-slots/${adSlot.id}/book`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          sponsorId: roleInfo.sponsorId,
+          message: message || undefined,
+        }),
+      });
 
       if (!response.ok) {
         const data = await response.json();
@@ -122,13 +120,10 @@ export function AdSlotDetail({ id }: Props) {
     if (!adSlot) return;
 
     try {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4291'}/api/ad-slots/${adSlot.id}/unbook`,
-        {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-        }
-      );
+      const response = await fetch(`${API_URL}/api/ad-slots/${adSlot.id}/unbook`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+      });
 
       if (!response.ok) {
         throw new Error('Failed to reset booking');
@@ -138,7 +133,7 @@ export function AdSlotDetail({ id }: Props) {
       setAdSlot({ ...adSlot, isAvailable: true });
       setMessage('');
     } catch (err) {
-      console.error('Failed to unbook:', err);
+      logger.error('Failed to unbook:', err);
     }
   };
 

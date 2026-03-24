@@ -55,6 +55,7 @@ export const reactConfig = [
       },
       globals: {
         ...globals.browser,
+        ...globals.node,
         ...globals.es2022,
       },
     },
@@ -66,6 +67,8 @@ export const reactConfig = [
       '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
       '@typescript-eslint/no-explicit-any': 'error',
       'no-console': 'warn',
+      // TypeScript resolves globals/types; avoids false positives (e.g. RequestInit, React types)
+      'no-undef': 'off',
     },
   },
   {

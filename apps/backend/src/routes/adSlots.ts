@@ -1,5 +1,5 @@
 import { Router, type Request, type Response, type IRouter } from 'express';
-import { prisma } from '../db.js';
+import { prisma, type AdSlotType } from '../db.js';
 import { getParam } from '../utils/helpers.js';
 
 const router: IRouter = Router();
@@ -60,17 +60,25 @@ router.get('/:id', async (req: Request, res: Response) => {
 });
 
 // POST /api/ad-slots - Create new ad slot
-// BUG: This accepts 'dimensions' and 'pricingModel' fields that don't exist in Prisma schema
-// BUG: No input validation for basePrice (could be negative or zero)
+// Optional body.dimensions: { width?: number; height?: number } maps to schema width/height.
+// pricingModel applies to Placement, not AdSlot — ignored here.
 router.post('/', async (req: Request, res: Response) => {
   try {
-    const { name, description, type, dimensions, basePrice, pricingModel, publisherId } = req.body;
+    const { name, description, type, dimensions, basePrice, publisherId } = req.body;
 
     if (!name || !type || !basePrice || !publisherId) {
       res.status(400).json({
         error: 'Name, type, basePrice, and publisherId are required',
       });
       return;
+    }
+
+    let width: number | undefined;
+    let height: number | undefined;
+    if (dimensions && typeof dimensions === 'object' && !Array.isArray(dimensions)) {
+      const d = dimensions as { width?: unknown; height?: unknown };
+      if (typeof d.width === 'number') width = d.width;
+      if (typeof d.height === 'number') height = d.height;
     }
 
     // TODO: Add authentication middleware to verify user owns publisherId
@@ -81,10 +89,10 @@ router.post('/', async (req: Request, res: Response) => {
       data: {
         name,
         description,
-        type,
-        dimensions, // BUG: This field doesn't exist in schema
+        type: type as AdSlotType,
+        width,
+        height,
         basePrice,
-        pricingModel: pricingModel || 'CPM', // BUG: This field doesn't exist in schema
         publisherId,
       },
       include: {
@@ -154,7 +162,7 @@ router.post('/:id/book', async (req: Request, res: Response) => {
 // POST /api/ad-slots/:id/unbook - Reset ad slot to available (for testing)
 router.post('/:id/unbook', async (req: Request, res: Response) => {
   try {
-    const { id } = req.params;
+    const id = getParam(req.params.id);
 
     const updatedSlot = await prisma.adSlot.update({
       where: { id },
