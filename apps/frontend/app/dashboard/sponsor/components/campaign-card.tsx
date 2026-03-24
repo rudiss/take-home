@@ -1,5 +1,3 @@
-'use client';
-
 interface CampaignCardProps {
   campaign: {
     id: string;
@@ -20,10 +18,9 @@ const statusColors: Record<string, string> = {
   COMPLETED: 'bg-blue-100 text-blue-700',
 };
 
-export function CampaignCard({ campaign }: CampaignCardProps) {
+export function CampaignCard({ campaign }: Readonly<CampaignCardProps>) {
   const progress =
     campaign.budget > 0 ? (Number(campaign.spent) / Number(campaign.budget)) * 100 : 0;
-
   return (
     <div className="rounded-lg border border-[--color-border] p-4">
       <div className="mb-2 flex items-start justify-between">

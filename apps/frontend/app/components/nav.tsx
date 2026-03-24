@@ -6,25 +6,42 @@ import { authClient } from '@/auth-client';
 
 type UserRole = 'sponsor' | 'publisher' | null;
 
+interface RoleForUser {
+  userId: string;
+  role: UserRole;
+}
+
 export function Nav() {
   const { data: session, isPending } = authClient.useSession();
   const user = session?.user;
-  const [role, setRole] = useState<UserRole>(null);
+  const [roleForUser, setRoleForUser] = useState<RoleForUser | null>(null);
 
   // TODO: Convert to server component and fetch role server-side
   // Fetch user role from backend when user is logged in
   useEffect(() => {
-    if (user?.id) {
-      fetch(
-        `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4291'}/api/auth/role/${user.id}`
-      )
-        .then((res) => res.json())
-        .then((data) => setRole(data.role))
-        .catch(() => setRole(null));
-    } else {
-      setRole(null);
-    }
+    if (!user?.id) return;
+
+    const userId = user.id;
+    let cancelled = false;
+
+    fetch(
+      `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4291'}/api/auth/role/${userId}`
+    )
+      .then((res) => res.json())
+      .then((data: { role: UserRole }) => {
+        if (!cancelled) setRoleForUser({ userId, role: data.role });
+      })
+      .catch(() => {
+        if (!cancelled) setRoleForUser({ userId, role: null });
+      });
+
+    return () => {
+      cancelled = true;
+    };
   }, [user?.id]);
+
+  const role: UserRole =
+    user?.id && roleForUser?.userId === user.id ? roleForUser.role : null;
 
   // TODO: Add active link styling using usePathname() from next/navigation
   // The current page's link should be highlighted differently
