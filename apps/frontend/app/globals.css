@@ -56,6 +56,25 @@ body {
 }
 
 /*
+ * Native <dialog> opened with showModal() — Tailwind preflight zeroes margins and
+ * breaks the default centered placement; this restores a viewport-centered modal.
+ */
+dialog:modal {
+  position: fixed;
+  inset: 0;
+  width: fit-content;
+  height: fit-content;
+  max-width: min(28rem, calc(100vw - 2rem));
+  max-height: calc(100vh - 2rem);
+  margin: auto;
+  overflow: auto;
+}
+
+dialog::backdrop {
+  background-color: rgb(0 0 0 / 0.45);
+}
+
+/*
  * HINT: Use Tailwind v4 arbitrary values with CSS vars:
  * - bg-[--color-primary] for custom backgrounds
  * - text-[--color-foreground] for custom text colors

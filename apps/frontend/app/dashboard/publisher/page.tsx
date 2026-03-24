@@ -18,7 +18,7 @@ export default async function PublisherDashboard() {
 
   // Verify user has 'publisher' role
   const roleData = await getUserRole(session.user.id);
-  if (roleData.role !== 'publisher') {
+  if (roleData.role !== 'publisher' || !roleData.publisherId) {
     redirect('/');
   }
 
@@ -28,12 +28,11 @@ export default async function PublisherDashboard() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold">My Ad Slots</h1>
-        {/* TODO: Add CreateAdSlotButton here */}
-      </div>
-
-      <AdSlotList adSlots={adSlots} />
+      <h1 className="text-2xl font-bold">My Ad Slots</h1>
+      <h2 id="publisher-slots-heading" className="text-lg font-semibold text-[--color-foreground]">
+        Your listings
+      </h2>
+      <AdSlotList adSlots={adSlots} aria-labelledby="publisher-slots-heading" />
     </div>
   );
 }

@@ -8,6 +8,7 @@ import type { AdSlot } from '@/lib/types';
 const typeColors: Record<string, string> = {
   DISPLAY: 'bg-blue-100 text-blue-700',
   VIDEO: 'bg-red-100 text-red-700',
+  NATIVE: 'bg-emerald-100 text-emerald-800',
   NEWSLETTER: 'bg-purple-100 text-purple-700',
   PODCAST: 'bg-orange-100 text-orange-700',
 };

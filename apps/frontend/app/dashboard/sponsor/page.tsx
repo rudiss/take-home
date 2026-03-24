@@ -18,7 +18,7 @@ export default async function SponsorDashboard() {
 
   // Verify user has 'sponsor' role
   const roleData = await getUserRole(session.user.id);
-  if (roleData.role !== 'sponsor') {
+  if (roleData.role !== 'sponsor' || !roleData.sponsorId) {
     redirect('/');
   }
 
@@ -28,12 +28,11 @@ export default async function SponsorDashboard() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold">My Campaigns</h1>
-        {/* TODO: Add CreateCampaignButton here */}
-      </div>
-
-      <CampaignList campaigns={campaigns} />
+      <h1 className="text-2xl font-bold">My Campaigns</h1>
+      <h2 id="sponsor-campaigns-heading" className="text-lg font-semibold text-[--color-foreground]">
+        Your campaigns
+      </h2>
+      <CampaignList campaigns={campaigns} aria-labelledby="sponsor-campaigns-heading" />
     </div>
   );
 }
