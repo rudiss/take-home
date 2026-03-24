@@ -1,5 +1,3 @@
-'use client';
-
 interface AdSlotCardProps {
   adSlot: {
     id: string;
@@ -18,7 +16,7 @@ const typeColors: Record<string, string> = {
   PODCAST: 'bg-orange-100 text-orange-700',
 };
 
-export function AdSlotCard({ adSlot }: AdSlotCardProps) {
+export function AdSlotCard({ adSlot }: Readonly<AdSlotCardProps>) {
   return (
     <div className="rounded-lg border border-[--color-border] p-4">
       <div className="mb-2 flex items-start justify-between">

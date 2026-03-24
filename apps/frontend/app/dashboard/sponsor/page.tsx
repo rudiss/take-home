@@ -6,8 +6,10 @@ import { getCampaigns } from '@/lib/api';
 import { CampaignList } from './components/campaign-list';
 
 export default async function SponsorDashboard() {
+  const headersList = await headers();
+
   const session = await auth.api.getSession({
-    headers: await headers(),
+    headers: headersList,
   });
 
   if (!session?.user) {
@@ -20,7 +22,9 @@ export default async function SponsorDashboard() {
     redirect('/');
   }
 
-  const campaigns = await getCampaigns(roleData.sponsorId);
+  // Forward the session cookie to the backend API
+  const cookie = headersList.get('cookie') ?? '';
+  const campaigns = await getCampaigns({ headers: { cookie } });
 
   return (
     <div className="space-y-6">

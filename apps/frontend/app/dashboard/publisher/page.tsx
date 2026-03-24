@@ -2,11 +2,14 @@ import { headers } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { auth } from '@/auth';
 import { getUserRole } from '@/lib/auth-helpers';
+import { getAdSlots } from '@/lib/api';
 import { AdSlotList } from './components/ad-slot-list';
 
 export default async function PublisherDashboard() {
+  const headersList = await headers();
+
   const session = await auth.api.getSession({
-    headers: await headers(),
+    headers: headersList,
   });
 
   if (!session?.user) {
@@ -19,6 +22,10 @@ export default async function PublisherDashboard() {
     redirect('/');
   }
 
+  // Forward the session cookie to the backend API
+  const cookie = headersList.get('cookie') ?? '';
+  const adSlots = await getAdSlots({ headers: { cookie } });
+
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
@@ -26,7 +33,7 @@ export default async function PublisherDashboard() {
         {/* TODO: Add CreateAdSlotButton here */}
       </div>
 
-      <AdSlotList />
+      <AdSlotList adSlots={adSlots} />
     </div>
   );
 }
