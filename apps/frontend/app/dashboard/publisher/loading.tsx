@@ -1,22 +1,25 @@
+import { publisherLoadingTv, publisherSkeletonCardTv } from './publisher-dashboard.styles';
+
 function SkeletonCard() {
+  const sk = publisherSkeletonCardTv();
   return (
-    <div className="animate-pulse space-y-4 py-2">
-      <div className="flex justify-between gap-3">
-        <div className="h-6 w-40 rounded bg-slate-800" />
-        <div className="h-5 w-16 rounded-full bg-slate-800" />
+    <div className={sk.root()}>
+      <div className={sk.topRow()}>
+        <div className={sk.titleBar()} />
+        <div className={sk.badge()} />
       </div>
-      <div className="space-y-2">
-        <div className="h-3 w-full rounded bg-slate-800/80" />
-        <div className="h-3 w-4/5 rounded bg-slate-800/80" />
+      <div className={sk.lineStack()}>
+        <div className={sk.lineFull()} />
+        <div className={sk.linePart()} />
       </div>
-      <div className="flex justify-between">
-        <div className="h-4 w-24 rounded bg-slate-800" />
-        <div className="h-6 w-20 rounded bg-slate-800" />
+      <div className={sk.metaRow()}>
+        <div className={sk.metaLeft()} />
+        <div className={sk.metaRight()} />
       </div>
-      <div className="border-t border-slate-800 pt-4">
-        <div className="flex gap-6">
-          <div className="h-4 w-10 rounded bg-slate-800" />
-          <div className="h-4 w-14 rounded bg-slate-800" />
+      <div className={sk.actionsSection()}>
+        <div className={sk.actionsRow()}>
+          <div className={sk.actionA()} />
+          <div className={sk.actionB()} />
         </div>
       </div>
     </div>
@@ -24,24 +27,26 @@ function SkeletonCard() {
 }
 
 export default function Loading() {
+  const load = publisherLoadingTv();
+
   return (
-    <div className="space-y-8">
+    <div className={load.root()}>
       <div>
-        <div className="h-9 w-48 animate-pulse rounded bg-slate-800" />
-        <div className="mt-2 h-4 w-72 max-w-full animate-pulse rounded bg-slate-800/70" />
+        <div className={load.headerTitle()} />
+        <div className={load.headerSubtitle()} />
       </div>
 
-      <div className="flex flex-wrap gap-x-8 gap-y-2 border-b border-slate-800/80 pb-6">
+      <div className={load.statsRow()}>
         {Array.from({ length: 4 }).map((_, i) => (
-          <div key={i} className="h-5 w-36 animate-pulse rounded bg-slate-800" />
+          <div key={i} className={load.statItem()} />
         ))}
       </div>
 
-      <div className="flex justify-end">
-        <div className="h-5 w-32 animate-pulse rounded bg-slate-800" />
+      <div className={load.toolbarEnd()}>
+        <div className={load.toolbarBtn()} />
       </div>
 
-      <div className="grid grid-cols-1 gap-y-12 md:grid-cols-3 md:gap-x-12 md:gap-y-16">
+      <div className={load.cardGrid()}>
         <SkeletonCard />
         <SkeletonCard />
         <SkeletonCard />

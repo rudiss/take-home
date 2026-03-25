@@ -6,6 +6,7 @@ import { AdSlotCard } from './ad-slot-card';
 import { AdSlotForm } from './ad-slot-form';
 import {
   newSlotTriggerTv,
+  publisherAdSlotListTv,
   publisherEmptyStateTv,
   publisherToolbarTv,
 } from '../publisher-dashboard.styles';
@@ -25,12 +26,13 @@ export function AdSlotList({ adSlots }: Readonly<AdSlotListProps>) {
     setEditingSlot(adSlot);
   }, []);
 
+  const list = publisherAdSlotListTv();
   const toolbar = publisherToolbarTv();
   const empty = publisherEmptyStateTv();
   const newLink = newSlotTriggerTv;
 
   return (
-    <div className="space-y-6">
+    <div className={list.root()}>
       <div className={toolbar.bar()}>
         <p className={toolbar.hint()}>
           Slots appear on the public marketplace when marked available. Edit anytime to refine your
@@ -50,7 +52,7 @@ export function AdSlotList({ adSlots }: Readonly<AdSlotListProps>) {
       </div>
 
       {showCreate && (
-        <div className="max-w-2xl">
+        <div className={list.formWrap()}>
           <AdSlotForm onClose={handleCloseCreate} />
         </div>
       )}
@@ -72,11 +74,11 @@ export function AdSlotList({ adSlots }: Readonly<AdSlotListProps>) {
           </button>
         </div>
       ) : (
-        <div className="grid grid-cols-1 gap-y-12 md:grid-cols-3 md:gap-x-12 md:gap-y-16">
+        <div className={list.cardGrid()}>
           {adSlots.map((slot) =>
             editingSlot?.id === slot.id ? (
-              <div key={slot.id} className="md:col-span-3">
-                <div className="max-w-2xl">
+              <div key={slot.id} className={list.editFormRow()}>
+                <div className={list.formWrap()}>
                   <AdSlotForm adSlot={slot} onClose={handleCloseEdit} />
                 </div>
               </div>

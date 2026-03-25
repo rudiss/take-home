@@ -4,6 +4,7 @@ import { useState, useCallback } from 'react';
 import type { Campaign } from '@/lib/types';
 import { CampaignCard } from './campaign-card';
 import { CampaignForm } from './campaign-form';
+import { campaignListTv } from '../sponsor-dashboard.styles';
 
 interface CampaignListProps {
   campaigns: Campaign[];
@@ -20,16 +21,18 @@ export function CampaignList({ campaigns }: Readonly<CampaignListProps>) {
     setEditingCampaign(campaign);
   }, []);
 
+  const list = campaignListTv();
+
   return (
-    <div className="space-y-6">
-      <div className="flex justify-end">
+    <div className={list.root()}>
+      <div className={list.toolbar()}>
         <button
           type="button"
           onClick={() => {
             setEditingCampaign(null);
             setShowCreate(!showCreate);
           }}
-          className="rounded-lg bg-[--color-primary] px-5 py-2.5 text-sm font-medium text-white transition-colors hover:bg-[--color-primary-hover]"
+          className={list.newButton()}
         >
           {showCreate ? 'Cancel' : '+ New Campaign'}
         </button>
@@ -38,17 +41,19 @@ export function CampaignList({ campaigns }: Readonly<CampaignListProps>) {
       {showCreate && <CampaignForm onClose={handleCloseCreate} />}
 
       {campaigns.length === 0 && !showCreate ? (
-        <div className="rounded-xl bg-[--color-background] p-12 text-center shadow-[--shadow-card]">
-          <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-[--color-primary]/10">
-            <span className="text-xl text-[--color-primary]">+</span>
+        <div className={list.emptyRoot()}>
+          <div className={list.emptyIconWrap()}>
+            <span className={list.emptyIcon()} aria-hidden>
+              +
+            </span>
           </div>
-          <h3 className="mb-1 font-semibold">No campaigns yet</h3>
-          <p className="text-sm text-[--color-muted]">
+          <h3 className={list.emptyTitle()}>No campaigns yet</h3>
+          <p className={list.emptyBody()}>
             Create your first campaign to get started.
           </p>
         </div>
       ) : (
-        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+        <div className={list.cardGrid()}>
           {campaigns.map((campaign) =>
             editingCampaign?.id === campaign.id ? (
               <CampaignForm key={campaign.id} campaign={campaign} onClose={handleCloseEdit} />

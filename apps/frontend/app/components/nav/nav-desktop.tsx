@@ -1,6 +1,7 @@
 import { NavGuestAuthLinks } from './nav-guest-auth-links';
 import { NavPrimaryLinks } from './nav-primary-links';
 import { NavSignOutButton } from './nav-sign-out-button';
+import { NavThemeToggle } from './nav-theme-toggle';
 import { NavUserAvatar, NavUserIdentityText } from './nav-user-identity';
 import {
   navAuthPending,
@@ -9,10 +10,6 @@ import {
   navUserChipTextCol,
 } from './nav.styles';
 import type { SessionUser, UserRole } from './types';
-
-function NavDesktopAuthPending() {
-  return <div className={navAuthPending()} aria-hidden />;
-}
 
 function NavDesktopAuthSignedIn({ user, role }: Readonly<{ user: SessionUser; role: UserRole }>) {
   return (
@@ -23,6 +20,7 @@ function NavDesktopAuthSignedIn({ user, role }: Readonly<{ user: SessionUser; ro
           <NavUserIdentityText user={user} role={role} />
         </div>
       </div>
+      <NavThemeToggle />
       <NavSignOutButton variant="desktop" />
     </div>
   );
@@ -56,7 +54,19 @@ export function NavDesktopAuth({
   user: SessionUser | undefined;
   role: UserRole;
 }>) {
-  if (isPending) return <NavDesktopAuthPending />;
+  if (isPending) {
+    return (
+      <div className={navDesktopAuthRow()}>
+        <NavThemeToggle />
+        <div className={navAuthPending()} aria-hidden />
+      </div>
+    );
+  }
   if (user) return <NavDesktopAuthSignedIn user={user} role={role} />;
-  return <NavGuestAuthLinks layout="desktop" />;
+  return (
+    <div className={navDesktopAuthRow()}>
+      <NavThemeToggle />
+      <NavGuestAuthLinks layout="desktop" />
+    </div>
+  );
 }

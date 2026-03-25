@@ -27,7 +27,7 @@ export function AdSlotForm({ adSlot, onClose }: Readonly<AdSlotFormProps>) {
     <form action={formAction} className={form.root()}>
       <div className={form.header()}>
         <h3 className={form.title()}>{adSlot ? 'Edit Ad Slot' : 'New Ad Slot'}</h3>
-        <p className="mt-1 text-sm text-slate-500">
+        <p className={form.subtitle()}>
           {adSlot
             ? 'Changes apply on the marketplace as soon as you save.'
             : 'Add a clear name and description so sponsors understand the placement.'}
@@ -40,7 +40,7 @@ export function AdSlotForm({ adSlot, onClose }: Readonly<AdSlotFormProps>) {
 
       <div>
         <label htmlFor="name" className={form.label()}>
-          Name <span className="text-red-400">*</span>
+          Name <span className={form.requiredMark()}>*</span>
         </label>
         <input
           id="name"
@@ -69,10 +69,10 @@ export function AdSlotForm({ adSlot, onClose }: Readonly<AdSlotFormProps>) {
         />
       </div>
 
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+      <div className={form.fieldGrid()}>
         <div>
           <label htmlFor="type" className={form.label()}>
-            Type <span className="text-red-400">*</span>
+            Type <span className={form.requiredMark()}>*</span>
           </label>
           <select id="type" name="type" required defaultValue={adSlot?.type ?? ''} className={form.input()}>
             <option value="">Select type…</option>
@@ -88,7 +88,7 @@ export function AdSlotForm({ adSlot, onClose }: Readonly<AdSlotFormProps>) {
         </div>
         <div>
           <label htmlFor="basePrice" className={form.label()}>
-            Base price ($/mo) <span className="text-red-400">*</span>
+            Base price ($/mo) <span className={form.requiredMark()}>*</span>
           </label>
           <input
             id="basePrice"
@@ -111,7 +111,7 @@ export function AdSlotForm({ adSlot, onClose }: Readonly<AdSlotFormProps>) {
         <SubmitButton
           label={adSlot ? 'Save changes' : 'Create slot'}
           pendingLabel="Saving…"
-          className="rounded-lg bg-sky-500 px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-sky-400 disabled:opacity-50"
+          variant="sky"
         />
         <button type="button" onClick={onClose} className={form.cancelButton()}>
           Cancel

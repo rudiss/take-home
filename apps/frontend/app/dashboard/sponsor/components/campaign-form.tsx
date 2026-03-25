@@ -5,6 +5,7 @@ import type { Campaign } from '@/lib/types';
 import type { DashboardActionState } from '../../action-types';
 import { createCampaignAction, updateCampaignAction } from '../actions';
 import { SubmitButton } from '../../components/submit-button';
+import { campaignFormTv } from '../sponsor-dashboard.styles';
 
 interface CampaignFormProps {
   campaign?: Campaign;
@@ -20,33 +21,26 @@ const initialState: DashboardActionState = {};
 export function CampaignForm({ campaign, onClose }: Readonly<CampaignFormProps>) {
   const action = campaign ? updateCampaignAction : createCampaignAction;
   const [state, formAction] = useActionState(action, initialState);
+  const form = campaignFormTv();
 
   useEffect(() => {
     if (state.success) onClose();
   }, [state.success, onClose]);
 
-  const inputClass =
-    'w-full rounded-lg border border-[--color-border] bg-[--color-background] px-3 py-2.5 text-sm transition-colors placeholder:text-[--color-muted]';
-
   return (
-    <form
-      action={formAction}
-      className="space-y-5 rounded-xl bg-[--color-background] p-6 shadow-[--shadow-card]"
-    >
-      <div className="border-b border-[--color-border] pb-4">
-        <h3 className="text-lg font-semibold">
+    <form action={formAction} className={form.root()}>
+      <div className={form.header()}>
+        <h3 className={form.title()}>
           {campaign ? 'Edit Campaign' : 'New Campaign'}
         </h3>
       </div>
 
-      {state.error && (
-        <div className="rounded-lg bg-red-50 p-3 text-sm text-red-700">{state.error}</div>
-      )}
+      {state.error && <div className={form.errorBanner()}>{state.error}</div>}
 
       {campaign && <input type="hidden" name="id" value={campaign.id} />}
 
       <div>
-        <label htmlFor="name" className="mb-1.5 block text-sm font-medium">
+        <label htmlFor="name" className={form.label()}>
           Name
         </label>
         <input
@@ -54,15 +48,15 @@ export function CampaignForm({ campaign, onClose }: Readonly<CampaignFormProps>)
           name="name"
           defaultValue={campaign?.name}
           placeholder="Campaign name"
-          className={inputClass}
+          className={form.input()}
         />
         {state.fieldErrors?.name && (
-          <p className="mt-1.5 text-xs text-red-600">{state.fieldErrors.name}</p>
+          <p className={form.fieldError()}>{state.fieldErrors.name}</p>
         )}
       </div>
 
       <div>
-        <label htmlFor="description" className="mb-1.5 block text-sm font-medium">
+        <label htmlFor="description" className={form.label()}>
           Description
         </label>
         <textarea
@@ -71,12 +65,12 @@ export function CampaignForm({ campaign, onClose }: Readonly<CampaignFormProps>)
           rows={2}
           defaultValue={campaign?.description}
           placeholder="Brief description..."
-          className={inputClass}
+          className={form.input()}
         />
       </div>
 
       <div>
-        <label htmlFor="budget" className="mb-1.5 block text-sm font-medium">
+        <label htmlFor="budget" className={form.label()}>
           Budget ($)
         </label>
         <input
@@ -87,16 +81,16 @@ export function CampaignForm({ campaign, onClose }: Readonly<CampaignFormProps>)
           step="0.01"
           defaultValue={campaign ? Number(campaign.budget) : undefined}
           placeholder="0.00"
-          className={inputClass}
+          className={form.input()}
         />
         {state.fieldErrors?.budget && (
-          <p className="mt-1.5 text-xs text-red-600">{state.fieldErrors.budget}</p>
+          <p className={form.fieldError()}>{state.fieldErrors.budget}</p>
         )}
       </div>
 
-      <div className="grid grid-cols-2 gap-4">
+      <div className={form.dateGrid()}>
         <div>
-          <label htmlFor="startDate" className="mb-1.5 block text-sm font-medium">
+          <label htmlFor="startDate" className={form.label()}>
             Start Date
           </label>
           <input
@@ -104,14 +98,14 @@ export function CampaignForm({ campaign, onClose }: Readonly<CampaignFormProps>)
             name="startDate"
             type="date"
             defaultValue={campaign ? toDateInputValue(campaign.startDate) : undefined}
-            className={inputClass}
+            className={form.input()}
           />
           {state.fieldErrors?.startDate && (
-            <p className="mt-1.5 text-xs text-red-600">{state.fieldErrors.startDate}</p>
+            <p className={form.fieldError()}>{state.fieldErrors.startDate}</p>
           )}
         </div>
         <div>
-          <label htmlFor="endDate" className="mb-1.5 block text-sm font-medium">
+          <label htmlFor="endDate" className={form.label()}>
             End Date
           </label>
           <input
@@ -119,20 +113,20 @@ export function CampaignForm({ campaign, onClose }: Readonly<CampaignFormProps>)
             name="endDate"
             type="date"
             defaultValue={campaign ? toDateInputValue(campaign.endDate) : undefined}
-            className={inputClass}
+            className={form.input()}
           />
           {state.fieldErrors?.endDate && (
-            <p className="mt-1.5 text-xs text-red-600">{state.fieldErrors.endDate}</p>
+            <p className={form.fieldError()}>{state.fieldErrors.endDate}</p>
           )}
         </div>
       </div>
 
       {campaign && (
         <div>
-          <label htmlFor="status" className="mb-1.5 block text-sm font-medium">
+          <label htmlFor="status" className={form.label()}>
             Status
           </label>
-          <select id="status" name="status" defaultValue={campaign.status} className={inputClass}>
+          <select id="status" name="status" defaultValue={campaign.status} className={form.input()}>
             <option value="DRAFT">Draft</option>
             <option value="PENDING_REVIEW">Pending review</option>
             <option value="APPROVED">Approved</option>
@@ -142,18 +136,14 @@ export function CampaignForm({ campaign, onClose }: Readonly<CampaignFormProps>)
             <option value="CANCELLED">Cancelled</option>
           </select>
           {state.fieldErrors?.status && (
-            <p className="mt-1.5 text-xs text-red-600">{state.fieldErrors.status}</p>
+            <p className={form.fieldError()}>{state.fieldErrors.status}</p>
           )}
         </div>
       )}
 
-      <div className="flex gap-3 border-t border-[--color-border] pt-4">
+      <div className={form.footer()}>
         <SubmitButton label={campaign ? 'Update' : 'Create'} pendingLabel="Saving..." />
-        <button
-          type="button"
-          onClick={onClose}
-          className="rounded-lg border border-[--color-border] px-4 py-2.5 text-sm font-medium transition-colors hover:bg-[--color-surface]"
-        >
+        <button type="button" onClick={onClose} className={form.cancelButton()}>
           Cancel
         </button>
       </div>

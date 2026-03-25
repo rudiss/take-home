@@ -9,7 +9,7 @@ export const card = tv({
 });
 
 export const logo = tv({
-  base: 'mx-auto flex h-12 w-12 items-center justify-center rounded-xl bg-linear-to-br from-[--color-primary] to-indigo-600 text-lg font-bold text-white shadow-sm',
+  base: 'mx-auto flex h-12 w-12 items-center justify-center rounded-xl bg-linear-to-br from-[--color-primary] to-indigo-500 text-lg font-bold text-white shadow-sm',
 });
 
 export const heading = tv({

@@ -4,15 +4,17 @@ import { auth } from '@/auth';
 import { getUserRole } from '@/lib/auth-helpers';
 import { getCampaigns } from '@/lib/api';
 import { CampaignList } from './components/campaign-list';
+import { sponsorPageTv } from './sponsor-dashboard.styles';
 
 function StatCard({
   label,
   value,
 }: Readonly<{ label: string; value: string | number }>) {
+  const page = sponsorPageTv();
   return (
-    <div className="rounded-xl bg-[--color-background] p-5 shadow-[--shadow-card]">
-      <p className="text-sm font-medium text-[--color-muted]">{label}</p>
-      <p className="mt-1 text-2xl font-semibold">{value}</p>
+    <div className={page.statCard()}>
+      <p className={page.statLabel()}>{label}</p>
+      <p className={page.statValue()}>{value}</p>
     </div>
   );
 }
@@ -40,14 +42,16 @@ export default async function SponsorDashboard() {
   const totalSpent = campaigns.reduce((sum, c) => sum + Number(c.spent), 0);
   const activeCampaigns = campaigns.filter((c) => c.status === 'ACTIVE').length;
 
+  const page = sponsorPageTv();
+
   return (
-    <div className="space-y-8">
-      <div>
-        <h1 className="text-2xl font-bold">My Campaigns</h1>
-        <p className="mt-1 text-[--color-muted]">Manage and track your sponsorship campaigns</p>
+    <div className={page.root()}>
+      <div className={page.headerBlock()}>
+        <h1 className={page.title()}>My Campaigns</h1>
+        <p className={page.subtitle()}>Manage and track your sponsorship campaigns</p>
       </div>
 
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <div className={page.statsGrid()}>
         <StatCard label="Total Campaigns" value={campaigns.length} />
         <StatCard label="Active" value={activeCampaigns} />
         <StatCard

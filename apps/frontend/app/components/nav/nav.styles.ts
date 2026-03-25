@@ -17,7 +17,7 @@ export const navBrandLink = tv({
 });
 
 export const navBrandMark = tv({
-  base: 'flex h-8 w-8 items-center justify-center rounded-lg bg-linear-to-br from-[--color-primary] to-indigo-600 text-sm font-bold text-white shadow-sm',
+  base: 'flex h-8 w-8 items-center justify-center rounded-lg bg-linear-to-br from-[--color-primary] to-indigo-500 text-sm font-bold text-white shadow-sm',
 });
 
 export const navBrandTextCol = tv({

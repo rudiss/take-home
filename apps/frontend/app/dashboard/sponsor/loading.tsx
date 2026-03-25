@@ -1,44 +1,49 @@
+import { sponsorLoadingTv, sponsorSkeletonCardTv } from './sponsor-dashboard.styles';
+
 function SkeletonCard() {
+  const sk = sponsorSkeletonCardTv();
   return (
-    <div className="animate-pulse rounded-xl bg-[--color-background] p-5 shadow-[--shadow-card]">
-      <div className="mb-3 flex items-start justify-between">
-        <div className="h-5 w-32 rounded bg-gray-200" />
-        <div className="h-5 w-16 rounded-full bg-gray-200" />
+    <div className={sk.root()}>
+      <div className={sk.topRow()}>
+        <div className={sk.titleBar()} />
+        <div className={sk.badge()} />
       </div>
-      <div className="mb-4 space-y-2">
-        <div className="h-3 w-full rounded bg-gray-100" />
-        <div className="h-3 w-2/3 rounded bg-gray-100" />
+      <div className={sk.lineStack()}>
+        <div className={sk.lineFull()} />
+        <div className={sk.linePart()} />
       </div>
-      <div className="mb-4">
-        <div className="mb-1.5 flex justify-between">
-          <div className="h-3 w-12 rounded bg-gray-100" />
-          <div className="h-3 w-24 rounded bg-gray-100" />
+      <div className={sk.progressBlock()}>
+        <div className={sk.progressLabels()}>
+          <div className={sk.labelA()} />
+          <div className={sk.labelB()} />
         </div>
-        <div className="h-2 rounded-full bg-gray-100" />
+        <div className={sk.progressTrack()} />
       </div>
-      <div className="h-3 w-40 rounded bg-gray-100" />
+      <div className={sk.dateLine()} />
     </div>
   );
 }
 
 export default function Loading() {
+  const load = sponsorLoadingTv();
+
   return (
-    <div className="space-y-8">
+    <div className={load.root()}>
       <div>
-        <div className="h-8 w-48 animate-pulse rounded bg-gray-200" />
-        <div className="mt-2 h-4 w-72 animate-pulse rounded bg-gray-100" />
+        <div className={load.headerTitle()} />
+        <div className={load.headerSubtitle()} />
       </div>
 
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <div className={load.statsGrid()}>
         {Array.from({ length: 4 }).map((_, i) => (
-          <div key={i} className="animate-pulse rounded-xl bg-[--color-background] p-5 shadow-[--shadow-card]">
-            <div className="h-3 w-20 rounded bg-gray-100" />
-            <div className="mt-2 h-7 w-16 rounded bg-gray-200" />
+          <div key={i} className={load.statCard()}>
+            <div className={load.statLineA()} />
+            <div className={load.statLineB()} />
           </div>
         ))}
       </div>
 
-      <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+      <div className={load.cardGrid()}>
         <SkeletonCard />
         <SkeletonCard />
         <SkeletonCard />

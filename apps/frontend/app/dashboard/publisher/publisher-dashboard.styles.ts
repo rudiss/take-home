@@ -89,13 +89,100 @@ export const publisherFormTv = tv({
     root: 'space-y-5 rounded-xl border border-slate-700 bg-slate-900/60 p-6 shadow-lg backdrop-blur-sm sm:p-8',
     header: 'border-b border-slate-700 pb-4',
     title: 'text-lg font-semibold text-white',
+    subtitle: 'mt-1 text-sm text-slate-500',
+    fieldGrid: 'grid grid-cols-1 gap-4 sm:grid-cols-2',
     errorBanner: 'rounded-lg border border-red-500/30 bg-red-950/50 p-3 text-sm text-red-200',
     label: 'mb-1.5 block text-sm font-medium text-slate-300',
+    requiredMark: 'text-red-400',
     input:
       'w-full rounded-lg border border-slate-600 bg-slate-950/80 px-3 py-2.5 text-sm text-white shadow-inner placeholder:text-slate-500 focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-500/30',
     footer: 'flex flex-wrap gap-3 border-t border-slate-700 pt-4',
     cancelButton:
       'rounded-lg border border-slate-600 px-4 py-2.5 text-sm font-medium text-slate-200 transition-colors hover:border-slate-500 hover:bg-slate-800',
     fieldError: 'mt-1.5 text-xs text-red-400',
+  },
+});
+
+export const adSlotStatusLineTv = tv({
+  base: 'inline-flex items-center gap-2 text-sm font-medium',
+  variants: {
+    available: {
+      true: 'text-emerald-400',
+      false: 'text-slate-500',
+    },
+  },
+  defaultVariants: {
+    available: false,
+  },
+});
+
+export const adSlotStatusDotTv = tv({
+  base: 'h-2 w-2 shrink-0 rounded-full',
+  variants: {
+    available: {
+      true: 'bg-emerald-400',
+      false: 'bg-slate-600',
+    },
+  },
+  defaultVariants: {
+    available: false,
+  },
+});
+
+export const adSlotDescriptionEmptyTv = tv({
+  base: 'italic text-slate-500',
+});
+
+export const publisherAdSlotListTv = tv({
+  slots: {
+    root: 'space-y-6',
+    formWrap: 'max-w-2xl',
+    cardGrid: 'grid grid-cols-1 gap-y-12 md:grid-cols-3 md:gap-x-12 md:gap-y-16',
+    editFormRow: 'md:col-span-3',
+  },
+});
+
+export const publisherLoadingTv = tv({
+  slots: {
+    root: 'space-y-8',
+    headerTitle: 'h-9 w-48 animate-pulse rounded bg-slate-800',
+    headerSubtitle: 'mt-2 h-4 w-72 max-w-full animate-pulse rounded bg-slate-800/70',
+    statsRow: 'flex flex-wrap gap-x-8 gap-y-2 border-b border-slate-800/80 pb-6',
+    statItem: 'h-5 w-36 animate-pulse rounded bg-slate-800',
+    toolbarEnd: 'flex justify-end',
+    toolbarBtn: 'h-5 w-32 animate-pulse rounded bg-slate-800',
+    cardGrid: 'grid grid-cols-1 gap-y-12 md:grid-cols-3 md:gap-x-12 md:gap-y-16',
+  },
+});
+
+export const publisherSkeletonCardTv = tv({
+  slots: {
+    root: 'animate-pulse space-y-4 py-2',
+    topRow: 'flex justify-between gap-3',
+    titleBar: 'h-6 w-40 rounded bg-slate-800',
+    badge: 'h-5 w-16 rounded-full bg-slate-800',
+    lineStack: 'space-y-2',
+    lineFull: 'h-3 w-full rounded bg-slate-800/80',
+    linePart: 'h-3 w-4/5 rounded bg-slate-800/80',
+    metaRow: 'flex justify-between',
+    metaLeft: 'h-4 w-24 rounded bg-slate-800',
+    metaRight: 'h-6 w-20 rounded bg-slate-800',
+    actionsSection: 'border-t border-slate-800 pt-4',
+    actionsRow: 'flex gap-6',
+    actionA: 'h-4 w-10 rounded bg-slate-800',
+    actionB: 'h-4 w-14 rounded bg-slate-800',
+  },
+});
+
+export const publisherErrorTv = tv({
+  slots: {
+    root: 'flex min-h-[40vh] items-center justify-center px-4',
+    panel: 'w-full max-w-md rounded-xl border border-slate-700 bg-slate-900/80 p-8 text-center shadow-lg',
+    iconWrap: 'mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-red-500/15',
+    icon: 'text-lg font-semibold text-red-400',
+    title: 'mb-2 text-lg font-semibold text-white',
+    body: 'mb-6 text-sm text-slate-400',
+    retry:
+      'rounded-lg bg-sky-500 px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-sky-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-400',
   },
 });

@@ -199,7 +199,7 @@ export function LandingPage() {
 
       {/* CTA */}
       <section className="mx-auto mt-20 max-w-6xl sm:mt-28" aria-labelledby="cta-heading">
-        <div className="overflow-hidden rounded-3xl bg-linear-to-br from-[--color-primary] to-indigo-800 px-8 py-14 text-center text-white shadow-[--shadow-lg] sm:px-12 sm:py-16">
+        <div className="overflow-hidden rounded-3xl bg-linear-to-br from-[--color-primary] to-indigo-700 px-8 py-14 text-center text-white shadow-[--shadow-lg] sm:px-12 sm:py-16">
           <h2 id="cta-heading" className="text-3xl font-bold tracking-tight sm:text-4xl">
             Ready to grow with the right partners?
           </h2>

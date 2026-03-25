@@ -2,6 +2,7 @@
 
 import { useActionState, useEffect, useId, useRef } from 'react';
 import type { DashboardActionState } from '../action-types';
+import { deleteButtonTriggerTv, deleteDialogTv } from '../dashboard-shared.styles';
 
 interface DeleteButtonProps {
   action: (
@@ -12,6 +13,8 @@ interface DeleteButtonProps {
   label?: string;
   /** Accessible name for the item being deleted (optional). */
   itemLabel?: string;
+  /** Light (default) or publisher dark dashboard trigger. Ignored if `triggerClassName` is set. */
+  triggerTone?: 'default' | 'dark';
   /** Override trigger button styles (e.g. dark dashboard). */
   triggerClassName?: string;
 }
@@ -21,12 +24,14 @@ export function DeleteButton({
   id,
   label = 'Delete',
   itemLabel,
+  triggerTone = 'default',
   triggerClassName,
 }: Readonly<DeleteButtonProps>) {
   const dialogRef = useRef<HTMLDialogElement>(null);
   const titleId = useId();
   const descId = useId();
   const [state, formAction, pending] = useActionState(action, {});
+  const dlg = deleteDialogTv();
 
   useEffect(() => {
     if (state.success) {
@@ -34,38 +39,35 @@ export function DeleteButton({
     }
   }, [state.success]);
 
+  const triggerClass =
+    triggerClassName ?? deleteButtonTriggerTv({ tone: triggerTone });
+
   return (
     <>
-      <button
-        type="button"
-        className={
-          triggerClassName ?? 'text-sm text-red-600 hover:text-red-800'
-        }
-        onClick={() => dialogRef.current?.showModal()}
-      >
+      <button type="button" className={triggerClass} onClick={() => dialogRef.current?.showModal()}>
         {label}
       </button>
 
       <dialog
         ref={dialogRef}
-        className="z-[200] rounded-xl border border-[--color-border] bg-[--color-background] p-6 shadow-[--shadow-lg]"
+        className={dlg.root()}
         aria-labelledby={titleId}
         aria-describedby={descId}
       >
-        <h2 id={titleId} className="text-lg font-semibold text-[--color-foreground]">
+        <h2 id={titleId} className={dlg.title()}>
           Confirm delete
         </h2>
-        <p id={descId} className="mt-2 text-sm text-[--color-muted]">
+        <p id={descId} className={dlg.description()}>
           {itemLabel
             ? `Delete “${itemLabel}”? This cannot be undone.`
             : 'Are you sure you want to delete this? This cannot be undone.'}
         </p>
 
-        <form action={formAction} className="mt-6 flex items-center justify-end gap-3">
+        <form action={formAction} className={dlg.form()}>
           <input type="hidden" name="id" value={id} />
           <button
             type="button"
-            className="rounded-lg border border-[--color-border] px-4 py-2 text-sm font-medium transition-colors hover:bg-[--color-surface]"
+            className={dlg.cancel()}
             onClick={() => dialogRef.current?.close()}
           >
             Cancel
@@ -74,13 +76,13 @@ export function DeleteButton({
             type="submit"
             disabled={pending}
             aria-busy={pending}
-            className="rounded-lg bg-red-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-red-700 disabled:opacity-50"
+            className={dlg.submit()}
           >
             {pending ? 'Deleting…' : 'Delete'}
           </button>
         </form>
         {state.error && (
-          <p className="mt-2 text-xs text-red-600" role="alert" aria-live="polite">
+          <p className={dlg.error()} role="alert" aria-live="polite">
             {state.error}
           </p>
         )}

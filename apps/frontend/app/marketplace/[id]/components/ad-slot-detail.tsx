@@ -11,6 +11,11 @@ import { getAdSlot } from '@/lib/api';
 import { authClient } from '@/auth-client';
 import { logger } from '@/lib/utils';
 import type { AdSlot } from '@/lib/types';
+import {
+  adSlotDetailSidebarStatusTv,
+  adSlotDetailTv,
+  marketplaceTypeBadgeTv,
+} from '../../marketplace.styles';
 
 interface User {
   id: string;
@@ -27,19 +32,12 @@ interface RoleInfo {
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4291';
 
-const typeBadgeClass: Record<AdSlot['type'], string> = {
-  DISPLAY: 'bg-sky-100 text-sky-800',
-  VIDEO: 'bg-rose-100 text-rose-800',
-  NATIVE: 'bg-emerald-100 text-emerald-800',
-  NEWSLETTER: 'bg-violet-100 text-violet-800',
-  PODCAST: 'bg-amber-100 text-amber-900',
-};
-
 interface Props {
   id: string;
 }
 
 export function AdSlotDetail({ id }: Readonly<Props>) {
+  const d = adSlotDetailTv();
   const [adSlot, setAdSlot] = useState<AdSlot | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -139,18 +137,16 @@ export function AdSlotDetail({ id }: Readonly<Props>) {
   };
 
   if (loading) {
-    return <div className="py-12 text-center text-[--color-muted]">Loading...</div>;
+    return <div className={d.detailLoading()}>Loading...</div>;
   }
 
   if (error || !adSlot) {
     return (
-      <div className="space-y-4">
-        <Link href="/marketplace" className="text-[--color-primary] hover:underline">
+      <div className={d.errorStack()}>
+        <Link href="/marketplace" className={d.backLinkPlain()}>
           ← Back to Marketplace
         </Link>
-        <div className="rounded border border-red-200 bg-red-50 p-4 text-red-600">
-          {error || 'Ad slot not found'}
-        </div>
+        <div className={d.errorBanner()}>{error || 'Ad slot not found'}</div>
       </div>
     );
   }
@@ -160,61 +156,50 @@ export function AdSlotDetail({ id }: Readonly<Props>) {
     adSlot.isAvailable && !bookingSuccess && roleInfo?.role === 'sponsor' && !!roleInfo?.sponsorId;
 
   return (
-    <div className="space-y-8">
-      <Link
-        href="/marketplace"
-        className="inline-flex items-center text-sm font-medium text-[--color-primary] hover:underline"
-      >
+    <div className={d.root()}>
+      <Link href="/marketplace" className={d.backLink()}>
         ← Back to Marketplace
       </Link>
 
-      <div className="grid gap-8 lg:grid-cols-[1fr_min(100%,380px)] lg:items-start">
-        <div className="min-w-0 space-y-6">
-          <div className="relative aspect-[21/9] max-h-80 w-full overflow-hidden rounded-xl bg-[--color-surface] sm:aspect-[2/1]">
+      <div className={d.layout()}>
+        <div className={d.main()}>
+          <div className={d.hero()}>
             <Image
               src={adSlotImageUrl(adSlot.id, 1200, 600)}
               alt=""
               fill
-              className="object-cover"
+              className={d.heroImage()}
               sizes="(max-width: 1024px) 100vw, 66vw"
               priority
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
-            <div className="absolute bottom-0 left-0 right-0 p-5 sm:p-6">
-              <span
-                className={`inline-block rounded-md px-2.5 py-1 text-xs font-semibold ${typeBadgeClass[adSlot.type]}`}
-              >
+            <div className={d.heroGradient()} />
+            <div className={d.heroOverlay()}>
+              <span className={marketplaceTypeBadgeTv({ type: adSlot.type, placement: 'hero' })}>
                 {formatSlotTypeLabel(adSlot.type)}
               </span>
-              <h1 className="mt-2 text-2xl font-bold text-white drop-shadow sm:text-3xl">
-                {adSlot.name}
-              </h1>
+              <h1 className={d.heroTitle()}>{adSlot.name}</h1>
             </div>
           </div>
 
           {adSlot.publisher && (
-            <div className="flex flex-wrap items-start gap-3 rounded-xl border border-[--color-border] bg-[--color-surface] p-4">
-              <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-[--color-primary]/15 text-[--color-primary]">
-                <IconShieldCheck className="h-6 w-6" />
+            <div className={d.publisherCard()}>
+              <div className={d.publisherIconWrap()}>
+                <IconShieldCheck />
               </div>
               <div>
-                <p className="text-xs font-semibold uppercase tracking-wide text-[--color-muted]">
-                  Published by
-                </p>
-                <p className="text-lg font-semibold text-[--color-foreground]">
-                  {adSlot.publisher.name}
-                </p>
+                <p className={d.publisherLabel()}>Published by</p>
+                <p className={d.publisherName()}>{adSlot.publisher.name}</p>
                 {adSlot.publisher.website && (
                   <a
                     href={adSlot.publisher.website}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="mt-1 text-sm font-medium text-[--color-primary] hover:underline"
+                    className={d.publisherSiteLink()}
                   >
                     Visit publisher site
                   </a>
                 )}
-                <p className="mt-2 text-sm text-[--color-muted]">
+                <p className={d.publisherBlurb()}>
                   You&apos;re booking directly with this publisher. They&apos;ll confirm timing,
                   creative requirements, and next steps after you reserve.
                 </p>
@@ -224,17 +209,17 @@ export function AdSlotDetail({ id }: Readonly<Props>) {
 
           {adSlot.description && (
             <div>
-              <h2 className="text-lg font-semibold text-[--color-foreground]">About this placement</h2>
-              <p className="mt-2 text-[--color-muted]">{adSlot.description}</p>
+              <h2 className={d.sectionTitle()}>About this placement</h2>
+              <p className={d.sectionBody()}>{adSlot.description}</p>
             </div>
           )}
 
           <div>
-            <h2 className="text-lg font-semibold text-[--color-foreground]">What you get</h2>
-            <ul className="mt-3 space-y-2">
+            <h2 className={d.sectionTitle()}>What you get</h2>
+            <ul className={d.bulletList()}>
               {bullets.map((line) => (
-                <li key={line} className="flex gap-2 text-sm text-[--color-muted]">
-                  <IconCheckCircle className="mt-0.5 h-4 w-4 shrink-0 text-[--color-primary]" />
+                <li key={line} className={d.bulletItem()}>
+                  <IconCheckCircle />
                   <span>{line}</span>
                 </li>
               ))}
@@ -242,28 +227,26 @@ export function AdSlotDetail({ id }: Readonly<Props>) {
           </div>
         </div>
 
-        <aside className="lg:sticky lg:top-24">
-          <div className="space-y-4 rounded-xl border-2 border-[--color-primary]/25 bg-[--color-background] p-6 shadow-[--shadow-card]">
-            <div className="flex items-start justify-between gap-3">
+        <aside className={d.aside()}>
+          <div className={d.sidebarPanel()}>
+            <div className={d.sidebarHeaderRow()}>
               <div>
-                <p className="text-xs font-semibold uppercase tracking-wide text-[--color-muted]">
-                  Investment
-                </p>
-                <p className="text-3xl font-bold text-[--color-primary]">
+                <p className={d.investmentLabel()}>Investment</p>
+                <p className={d.investmentPrice()}>
                   ${Number(adSlot.basePrice).toLocaleString()}
-                  <span className="text-lg font-semibold text-[--color-muted]">/mo</span>
+                  <span className={d.investmentSuffix()}>/mo</span>
                 </p>
               </div>
             </div>
 
-            <div className="rounded-lg bg-[--color-surface] px-3 py-2">
-              <p
-                className={`text-sm font-semibold ${adSlot.isAvailable ? 'text-green-700' : 'text-[--color-muted]'}`}
-              >
-                {adSlot.isAvailable ? '● Available — reserve to lock in this slot' : '○ Currently booked'}
+            <div className={d.statusBox()}>
+              <p className={adSlotDetailSidebarStatusTv({ available: adSlot.isAvailable })}>
+                {adSlot.isAvailable
+                  ? '● Available — reserve to lock in this slot'
+                  : '○ Currently booked'}
               </p>
               {adSlot.isAvailable && (
-                <p className="mt-1 text-xs text-[--color-muted]">
+                <p className={d.statusHint()}>
                   Popular placements can fill quickly. Reserving starts the conversation with the
                   publisher — no payment is processed in this demo.
                 </p>
@@ -271,11 +254,7 @@ export function AdSlotDetail({ id }: Readonly<Props>) {
             </div>
 
             {!adSlot.isAvailable && !bookingSuccess && isListingPublisher && (
-              <button
-                type="button"
-                onClick={handleUnbook}
-                className="w-full text-sm font-medium text-[--color-primary] underline hover:opacity-80"
-              >
+              <button type="button" onClick={handleUnbook} className={d.unbookButton()}>
                 Reset listing (publisher)
               </button>
             )}
@@ -283,68 +262,61 @@ export function AdSlotDetail({ id }: Readonly<Props>) {
             {adSlot.isAvailable && !bookingSuccess && (
               <>
                 {roleLoading ? (
-                  <div className="py-4 text-center text-sm text-[--color-muted]">Loading account…</div>
+                  <div className={d.accountLoading()}>Loading account…</div>
                 ) : canBookAsSponsor ? (
-                  <div className="space-y-4 border-t border-[--color-border] pt-4">
+                  <div className={d.bookingSection()}>
                     <div>
-                      <p className="text-xs font-semibold uppercase tracking-wide text-[--color-muted]">
-                        Your organization
-                      </p>
-                      <p className="font-medium text-[--color-foreground]">
-                        {roleInfo.name || user?.name}
-                      </p>
+                      <p className={d.orgLabel()}>Your organization</p>
+                      <p className={d.orgName()}>{roleInfo.name || user?.name}</p>
                     </div>
                     <div>
-                      <label
-                        htmlFor="message"
-                        className="mb-1 block text-sm font-medium text-[--color-foreground]"
-                      >
-                        Note to publisher <span className="font-normal text-[--color-muted]">(optional)</span>
+                      <label htmlFor="message" className={d.fieldLabel()}>
+                        Note to publisher <span className={d.fieldHint()}>(optional)</span>
                       </label>
                       <textarea
                         id="message"
                         value={message}
                         onChange={(e) => setMessage(e.target.value)}
                         placeholder="Campaign goals, timing, or creative ideas…"
-                        className="w-full rounded-lg border border-[--color-border] bg-[--color-background] px-3 py-2 text-[--color-foreground] placeholder:text-[--color-muted] focus:border-[--color-primary] focus:outline-none focus:ring-2 focus:ring-[--color-primary]/20"
+                        className={d.textarea()}
                         rows={3}
                       />
                     </div>
-                    {bookingError && <p className="text-sm text-red-600">{bookingError}</p>}
+                    {bookingError && <p className={d.bookingError()}>{bookingError}</p>}
                     <button
                       type="button"
                       data-analytics="booking-cta"
                       onClick={handleBooking}
                       disabled={booking}
-                      className="w-full rounded-xl bg-[--color-primary] px-4 py-3.5 text-base font-bold text-white shadow-md transition-colors hover:bg-[--color-primary-hover] disabled:opacity-50"
+                      className={d.primaryButton()}
                     >
                       {booking ? 'Reserving…' : 'Reserve this placement'}
                     </button>
-                    <p className="text-center text-xs text-[--color-muted]">
+                    <p className={d.sidebarHint()}>
                       We&apos;ll notify the publisher instantly. You can coordinate details in your
                       campaigns dashboard.
                     </p>
                   </div>
                 ) : (
-                  <div className="space-y-3 border-t border-[--color-border] pt-4">
+                  <div className={d.gateSection()}>
                     {user && roleInfo?.role === 'publisher' ? (
-                      <p className="text-sm text-[--color-muted]">
+                      <p className={d.gateTextMuted()}>
                         Publishers can&apos;t book placements. Switch to a sponsor account to buy
                         inventory, or browse other listings.
                       </p>
                     ) : (
                       <>
-                        <p className="text-sm text-[--color-foreground]">
+                        <p className={d.gateText()}>
                           Sign in as a <strong>sponsor</strong> to reserve this placement and message
                           the publisher.
                         </p>
                         <Link
                           href={`/login?next=${encodeURIComponent(`/marketplace/${adSlot.id}`)}`}
-                          className="flex w-full items-center justify-center rounded-xl bg-[--color-primary] px-4 py-3.5 text-base font-bold text-white shadow-md transition-colors hover:bg-[--color-primary-hover]"
+                          className={d.primaryButton()}
                         >
                           Log in to continue
                         </Link>
-                        <p className="text-center text-xs text-[--color-muted]">
+                        <p className={d.sidebarHint()}>
                           New here? Use the demo sponsor account from the login page.
                         </p>
                       </>
@@ -355,12 +327,12 @@ export function AdSlotDetail({ id }: Readonly<Props>) {
             )}
 
             {bookingSuccess && (
-              <div className="rounded-lg border border-green-200 bg-green-50 p-4">
-                <h3 className="font-semibold text-green-800">You&apos;re on the list</h3>
-                <p className="mt-1 text-sm text-green-800">
+              <div className={d.successBox()}>
+                <h3 className={d.successTitle()}>You&apos;re on the list</h3>
+                <p className={d.successBody()}>
                   Your reservation is in. The publisher will follow up with next steps.
                 </p>
-                <p className="mt-3 text-xs text-green-800">
+                <p className={d.successNote()}>
                   Only this publisher can mark the slot available again from their dashboard.
                 </p>
               </div>

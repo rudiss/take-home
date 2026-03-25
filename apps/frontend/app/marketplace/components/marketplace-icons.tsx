@@ -1,6 +1,7 @@
 import type { SVGProps } from 'react';
+import { marketplaceIconTv } from '../marketplace.styles';
 
-export function IconChevronRight(props: SVGProps<SVGSVGElement>) {
+export function IconChevronRight({ className, ...props }: Readonly<SVGProps<SVGSVGElement>>) {
   return (
     <svg
       viewBox="0 0 24 24"
@@ -11,13 +12,14 @@ export function IconChevronRight(props: SVGProps<SVGSVGElement>) {
       strokeLinejoin="round"
       aria-hidden
       {...props}
+      className={marketplaceIconTv({ name: 'chevron', class: className })}
     >
       <path d="m9 18 6-6-6-6" />
     </svg>
   );
 }
 
-export function IconCheckCircle(props: SVGProps<SVGSVGElement>) {
+export function IconCheckCircle({ className, ...props }: Readonly<SVGProps<SVGSVGElement>>) {
   return (
     <svg
       viewBox="0 0 24 24"
@@ -28,6 +30,7 @@ export function IconCheckCircle(props: SVGProps<SVGSVGElement>) {
       strokeLinejoin="round"
       aria-hidden
       {...props}
+      className={marketplaceIconTv({ name: 'check', class: className })}
     >
       <circle cx="12" cy="12" r="10" />
       <path d="m9 12 2 2 4-4" />
@@ -35,7 +38,7 @@ export function IconCheckCircle(props: SVGProps<SVGSVGElement>) {
   );
 }
 
-export function IconShieldCheck(props: SVGProps<SVGSVGElement>) {
+export function IconShieldCheck({ className, ...props }: Readonly<SVGProps<SVGSVGElement>>) {
   return (
     <svg
       viewBox="0 0 24 24"
@@ -46,6 +49,7 @@ export function IconShieldCheck(props: SVGProps<SVGSVGElement>) {
       strokeLinejoin="round"
       aria-hidden
       {...props}
+      className={marketplaceIconTv({ name: 'shield', class: className })}
     >
       <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10" />
       <path d="m9 12 2 2 4-4" />

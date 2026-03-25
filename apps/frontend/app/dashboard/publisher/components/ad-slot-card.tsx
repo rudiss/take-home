@@ -3,7 +3,13 @@
 import type { AdSlot } from '@/lib/types';
 import { DeleteButton } from '../../components/delete-button';
 import { deleteAdSlotAction } from '../actions';
-import { adSlotCardTv, typeBadgeTv } from '../publisher-dashboard.styles';
+import {
+  adSlotCardTv,
+  adSlotDescriptionEmptyTv,
+  adSlotStatusDotTv,
+  adSlotStatusLineTv,
+  typeBadgeTv,
+} from '../publisher-dashboard.styles';
 
 interface AdSlotCardProps {
   adSlot: AdSlot;
@@ -24,18 +30,14 @@ export function AdSlotCard({ adSlot, onEdit }: Readonly<AdSlotCardProps>) {
       {adSlot.description ? (
         <p className={card.description()}>{adSlot.description}</p>
       ) : (
-        <p className={`${card.description()} italic text-slate-500`}>
+        <p className={`${card.description()} ${adSlotDescriptionEmptyTv()}`}>
           No description yet — add one so sponsors know what they&apos;re buying.
         </p>
       )}
 
       <div className={card.metaRow()}>
-        <span
-          className={`${card.statusLine()} ${available ? 'text-emerald-400' : 'text-slate-500'}`}
-        >
-          <span
-            className={`${card.statusDot()} ${available ? 'bg-emerald-400' : 'bg-slate-600'}`}
-          />
+        <span className={adSlotStatusLineTv({ available })}>
+          <span className={adSlotStatusDotTv({ available })} />
           {available ? 'Available' : 'Booked'}
         </span>
         <div className={card.priceBlock()}>
@@ -55,7 +57,7 @@ export function AdSlotCard({ adSlot, onEdit }: Readonly<AdSlotCardProps>) {
             action={deleteAdSlotAction}
             id={adSlot.id}
             itemLabel={adSlot.name}
-            triggerClassName="text-sm font-medium text-red-400 transition-colors hover:text-red-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-red-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
+            triggerTone="dark"
           />
         </div>
       </div>

@@ -1,17 +1,21 @@
 'use client';
 
 import { useFormStatus } from 'react-dom';
+import { submitButtonTv } from '../dashboard-shared.styles';
 
 interface SubmitButtonProps {
   label?: string;
   pendingLabel?: string;
   className?: string;
+  /** Default primary (theme); `sky` matches publisher dark forms. */
+  variant?: 'primary' | 'sky';
 }
 
 export function SubmitButton({
   label = 'Save',
   pendingLabel = 'Saving...',
   className,
+  variant = 'primary',
 }: Readonly<SubmitButtonProps>) {
   const { pending } = useFormStatus();
 
@@ -19,10 +23,7 @@ export function SubmitButton({
     <button
       type="submit"
       disabled={pending}
-      className={
-        className ??
-        'rounded-lg bg-[--color-primary] px-5 py-2.5 text-sm font-medium text-white transition-colors hover:bg-[--color-primary-hover] disabled:opacity-50'
-      }
+      className={submitButtonTv({ variant, class: className })}
     >
       {pending ? pendingLabel : label}
     </button>

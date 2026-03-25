@@ -9,19 +9,19 @@ import { trackMarketplaceEvent } from '@/lib/conversion-events';
 import { formatSlotTypeLabel } from '@/lib/marketplace-ux';
 import { getAdSlots } from '@/lib/api';
 import type { AdSlot } from '@/lib/types';
-
-const typeBadgeClass: Record<AdSlot['type'], string> = {
-  DISPLAY: 'bg-sky-100 text-sky-800',
-  VIDEO: 'bg-rose-100 text-rose-800',
-  NATIVE: 'bg-emerald-100 text-emerald-800',
-  NEWSLETTER: 'bg-violet-100 text-violet-800',
-  PODCAST: 'bg-amber-100 text-amber-900',
-};
+import {
+  marketplaceCardAvailabilityTv,
+  marketplaceListingCardTv,
+  marketplaceListingGridTv,
+  marketplaceStateMessageTv,
+  marketplaceTypeBadgeTv,
+} from '../marketplace.styles';
 
 export function AdSlotGrid() {
   const [adSlots, setAdSlots] = useState<AdSlot[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const card = marketplaceListingCardTv();
 
   useEffect(() => {
     trackMarketplaceEvent({ name: 'marketplace_view' });
@@ -42,23 +42,23 @@ export function AdSlotGrid() {
   }, [adSlots]);
 
   if (loading) {
-    return <div className="py-12 text-center text-[--color-muted]">Loading marketplace...</div>;
+    return <div className={marketplaceStateMessageTv({ kind: 'loading' })}>Loading marketplace...</div>;
   }
 
   if (error) {
-    return <div className="rounded border border-red-200 bg-red-50 p-4 text-red-600">{error}</div>;
+    return <div className={marketplaceStateMessageTv({ kind: 'error' })}>{error}</div>;
   }
 
   if (sorted.length === 0) {
     return (
-      <div className="rounded-lg border border-dashed border-[--color-border] p-12 text-center text-[--color-muted]">
+      <div className={marketplaceStateMessageTv({ kind: 'empty' })}>
         No ad slots available at the moment.
       </div>
     );
   }
 
   return (
-    <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+    <div className={marketplaceListingGridTv()}>
       {sorted.map((slot) => (
         <Link
           key={slot.id}
@@ -66,58 +66,44 @@ export function AdSlotGrid() {
           data-analytics="listing-card"
           data-slot-id={slot.id}
           onClick={() => trackMarketplaceEvent({ name: 'listing_card_click', slotId: slot.id })}
-          className="group flex flex-col overflow-hidden rounded-xl border border-[--color-border] bg-[--color-background] shadow-[--shadow-card] transition-shadow hover:shadow-[--shadow-card-hover]"
+          className={card.link()}
         >
-          <div className="relative aspect-[16/10] w-full overflow-hidden bg-[--color-surface]">
+          <div className={card.imageWrap()}>
             <Image
               src={adSlotImageUrl(slot.id, 640, 400)}
               alt=""
               fill
-              className="object-cover transition-transform duration-300 group-hover:scale-[1.03]"
+              className={card.image()}
               sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
             />
-            {slot.isAvailable ? (
-              <span className="absolute left-3 top-3 rounded-full bg-green-600 px-2.5 py-0.5 text-xs font-semibold text-white shadow-sm">
-                Open for booking
-              </span>
-            ) : (
-              <span className="absolute left-3 top-3 rounded-full bg-[--color-foreground]/80 px-2.5 py-0.5 text-xs font-semibold text-white shadow-sm">
-                Booked
-              </span>
-            )}
-            <span
-              className={`absolute right-3 top-3 rounded-md px-2 py-0.5 text-xs font-medium ${typeBadgeClass[slot.type]}`}
-            >
+            <span className={marketplaceCardAvailabilityTv({ available: slot.isAvailable })}>
+              {slot.isAvailable ? 'Open for booking' : 'Booked'}
+            </span>
+            <span className={marketplaceTypeBadgeTv({ type: slot.type, placement: 'grid' })}>
               {formatSlotTypeLabel(slot.type)}
             </span>
           </div>
 
-          <div className="flex flex-1 flex-col p-4">
-            <h3 className="text-lg font-bold leading-snug text-[--color-foreground] group-hover:text-[--color-primary]">
-              {slot.name}
-            </h3>
+          <div className={card.body()}>
+            <h3 className={card.cardTitle()}>{slot.name}</h3>
             {slot.publisher && (
-              <p className="mt-1 text-sm text-[--color-muted]">Publisher: {slot.publisher.name}</p>
+              <p className={card.publisher()}>Publisher: {slot.publisher.name}</p>
             )}
             {slot.description && (
-              <p className="mt-2 line-clamp-2 flex-1 text-sm text-[--color-muted]">
-                {slot.description}
-              </p>
+              <p className={card.description()}>{slot.description}</p>
             )}
 
-            <div className="mt-4 flex items-end justify-between gap-3 border-t border-[--color-border] pt-4">
+            <div className={card.footer()}>
               <div>
-                <p className="text-xs font-medium uppercase tracking-wide text-[--color-muted]">
-                  From
-                </p>
-                <p className="text-xl font-bold text-[--color-primary]">
+                <p className={card.fromLabel()}>From</p>
+                <p className={card.price()}>
                   ${Number(slot.basePrice).toLocaleString()}
-                  <span className="text-sm font-semibold text-[--color-muted]">/mo</span>
+                  <span className={card.priceSuffix()}>/mo</span>
                 </p>
               </div>
-              <span className="inline-flex items-center gap-0.5 text-sm font-semibold text-[--color-primary]">
+              <span className={card.cta()}>
                 View details
-                <IconChevronRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+                <IconChevronRight />
               </span>
             </div>
           </div>

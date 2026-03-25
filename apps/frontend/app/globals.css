@@ -1,21 +1,24 @@
 @import 'tailwindcss';
 
+/* Tell Tailwind v4 to use class-based dark mode */
+@custom-variant dark (&:where(.dark, .dark *));
+
 :root {
-  /* Primary brand colors */
-  --color-primary: #4f46e5;
-  --color-primary-hover: #4338ca;
-  --color-primary-light: #818cf8;
+  /* Primary brand colors — Anvara blue-violet */
+  --color-primary: #6366f1;
+  --color-primary-hover: #4f46e5;
+  --color-primary-light: #a5b4fc;
 
   /* Secondary colors */
   --color-secondary: #10b981;
   --color-secondary-hover: #059669;
 
-  /* Neutral colors */
+  /* Neutral colors — cool slate palette */
   --color-background: #ffffff;
-  --color-foreground: #111827;
-  --color-muted: #6b7280;
-  --color-border: #e5e7eb;
-  --color-surface: #f9fafb;
+  --color-foreground: #0f172a;
+  --color-muted: #64748b;
+  --color-border: #e2e8f0;
+  --color-surface: #ffffff;
 
   /* Status colors */
   --color-success: #22c55e;
@@ -28,21 +31,19 @@
   --shadow-lg: 0 10px 25px rgb(0 0 0 / 0.1);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --color-background: #111827;
-    --color-foreground: #f9fafb;
-    --color-muted: #9ca3af;
-    --color-border: #374151;
-    --color-surface: #1f2937;
-    --shadow-card: 0 1px 3px rgb(0 0 0 / 0.2);
-    --shadow-card-hover: 0 4px 12px rgb(0 0 0 / 0.3);
-    --shadow-lg: 0 10px 25px rgb(0 0 0 / 0.4);
-  }
+.dark {
+  --color-background: #1e293b;
+  --color-foreground: #f8fafc;
+  --color-muted: #94a3b8;
+  --color-border: #334155;
+  --color-surface: #0f172a;
+  --shadow-card: 0 1px 3px rgb(0 0 0 / 0.2);
+  --shadow-card-hover: 0 4px 12px rgb(0 0 0 / 0.3);
+  --shadow-lg: 0 10px 25px rgb(0 0 0 / 0.4);
 }
 
 body {
-  background-color: var(--color-surface);
+  background-color: var(--color-background);
   color: var(--color-foreground);
 }
 
@@ -58,7 +59,7 @@ textarea:focus,
 select:focus {
   outline: none;
   border-color: var(--color-primary);
-  box-shadow: 0 0 0 3px rgb(79 70 229 / 0.1);
+  box-shadow: 0 0 0 3px rgb(99 102 241 / 0.15);
 }
 
 /* Native dialog */
