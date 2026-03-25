@@ -6,6 +6,16 @@ const nextConfig: NextConfig = {
 
   // Transpile workspace packages
   transpilePackages: ['@anvara/config'],
+
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'picsum.photos',
+        pathname: '/**',
+      },
+    ],
+  },
 };
 
 export default nextConfig;

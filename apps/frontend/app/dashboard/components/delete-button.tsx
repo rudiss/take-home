@@ -12,6 +12,8 @@ interface DeleteButtonProps {
   label?: string;
   /** Accessible name for the item being deleted (optional). */
   itemLabel?: string;
+  /** Override trigger button styles (e.g. dark dashboard). */
+  triggerClassName?: string;
 }
 
 export function DeleteButton({
@@ -19,6 +21,7 @@ export function DeleteButton({
   id,
   label = 'Delete',
   itemLabel,
+  triggerClassName,
 }: Readonly<DeleteButtonProps>) {
   const dialogRef = useRef<HTMLDialogElement>(null);
   const titleId = useId();
@@ -35,7 +38,9 @@ export function DeleteButton({
     <>
       <button
         type="button"
-        className="text-sm text-red-600 hover:text-red-800"
+        className={
+          triggerClassName ?? 'text-sm text-red-600 hover:text-red-800'
+        }
         onClick={() => dialogRef.current?.showModal()}
       >
         {label}

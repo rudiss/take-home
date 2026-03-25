@@ -1,24 +1,16 @@
 'use client';
 
+import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import { adSlotImageUrl } from '@/lib/ad-slot-image';
+import { IconCheckCircle, IconShieldCheck } from '../../components/marketplace-icons';
+import { trackMarketplaceEvent } from '@/lib/conversion-events';
+import { formatSlotTypeLabel, slotValueBullets } from '@/lib/marketplace-ux';
 import { getAdSlot } from '@/lib/api';
 import { authClient } from '@/auth-client';
 import { logger } from '@/lib/utils';
-
-interface AdSlot {
-  id: string;
-  name: string;
-  description?: string;
-  type: string;
-  basePrice: number;
-  isAvailable: boolean;
-  publisher?: {
-    id: string;
-    name: string;
-    website?: string;
-  };
-}
+import type { AdSlot } from '@/lib/types';
 
 interface User {
   id: string;
@@ -35,12 +27,12 @@ interface RoleInfo {
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4291';
 
-const typeColors: Record<string, string> = {
-  DISPLAY: 'bg-blue-100 text-blue-700',
-  VIDEO: 'bg-red-100 text-red-700',
+const typeBadgeClass: Record<AdSlot['type'], string> = {
+  DISPLAY: 'bg-sky-100 text-sky-800',
+  VIDEO: 'bg-rose-100 text-rose-800',
   NATIVE: 'bg-emerald-100 text-emerald-800',
-  NEWSLETTER: 'bg-purple-100 text-purple-700',
-  PODCAST: 'bg-orange-100 text-orange-700',
+  NEWSLETTER: 'bg-violet-100 text-violet-800',
+  PODCAST: 'bg-amber-100 text-amber-900',
 };
 
 interface Props {
@@ -60,13 +52,14 @@ export function AdSlotDetail({ id }: Readonly<Props>) {
   const [bookingError, setBookingError] = useState<string | null>(null);
 
   useEffect(() => {
-    // Fetch ad slot
     getAdSlot(id)
-      .then(setAdSlot)
+      .then((slot) => {
+        setAdSlot(slot);
+        trackMarketplaceEvent({ name: 'listing_detail_view', slotId: slot.id });
+      })
       .catch(() => setError('Failed to load ad slot details'))
       .finally(() => setLoading(false));
 
-    // Check user session and fetch role
     authClient
       .getSession()
       .then(({ data }) => {
@@ -74,7 +67,6 @@ export function AdSlotDetail({ id }: Readonly<Props>) {
           const sessionUser = data.user as User;
           setUser(sessionUser);
 
-          // Fetch role info from backend
           fetch(`${API_URL}/api/auth/role/${sessionUser.id}`)
             .then((res) => res.json())
             .then((data) => setRoleInfo(data))
@@ -95,6 +87,7 @@ export function AdSlotDetail({ id }: Readonly<Props>) {
   const handleBooking = async () => {
     if (!roleInfo?.sponsorId || !adSlot) return;
 
+    trackMarketplaceEvent({ name: 'booking_cta_click', slotId: adSlot.id });
     setBooking(true);
     setBookingError(null);
 
@@ -115,6 +108,7 @@ export function AdSlotDetail({ id }: Readonly<Props>) {
 
       setBookingSuccess(true);
       setAdSlot({ ...adSlot, isAvailable: false });
+      trackMarketplaceEvent({ name: 'booking_submit_success', slotId: adSlot.id });
     } catch (err) {
       setBookingError(err instanceof Error ? err.message : 'Failed to book placement');
     } finally {
@@ -161,137 +155,218 @@ export function AdSlotDetail({ id }: Readonly<Props>) {
     );
   }
 
+  const bullets = slotValueBullets(adSlot.type);
+  const canBookAsSponsor =
+    adSlot.isAvailable && !bookingSuccess && roleInfo?.role === 'sponsor' && !!roleInfo?.sponsorId;
+
   return (
-    <div className="space-y-6">
-      <Link href="/marketplace" className="text-[--color-primary] hover:underline">
+    <div className="space-y-8">
+      <Link
+        href="/marketplace"
+        className="inline-flex items-center text-sm font-medium text-[--color-primary] hover:underline"
+      >
         ← Back to Marketplace
       </Link>
 
-      <div className="rounded-lg border border-[--color-border] p-6">
-        <div className="mb-4 flex items-start justify-between">
-          <div>
-            <h1 className="text-2xl font-bold">{adSlot.name}</h1>
-            {adSlot.publisher && (
-              <p className="text-[--color-muted]">
-                by {adSlot.publisher.name}
-                {adSlot.publisher.website && (
-                  <>
-                    {' '}
-                    ·{' '}
-                    <a
-                      href={adSlot.publisher.website}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-[--color-primary] hover:underline"
-                    >
-                      {adSlot.publisher.website}
-                    </a>
-                  </>
-                )}
-              </p>
-            )}
+      <div className="grid gap-8 lg:grid-cols-[1fr_min(100%,380px)] lg:items-start">
+        <div className="min-w-0 space-y-6">
+          <div className="relative aspect-[21/9] max-h-80 w-full overflow-hidden rounded-xl bg-[--color-surface] sm:aspect-[2/1]">
+            <Image
+              src={adSlotImageUrl(adSlot.id, 1200, 600)}
+              alt=""
+              fill
+              className="object-cover"
+              sizes="(max-width: 1024px) 100vw, 66vw"
+              priority
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
+            <div className="absolute bottom-0 left-0 right-0 p-5 sm:p-6">
+              <span
+                className={`inline-block rounded-md px-2.5 py-1 text-xs font-semibold ${typeBadgeClass[adSlot.type]}`}
+              >
+                {formatSlotTypeLabel(adSlot.type)}
+              </span>
+              <h1 className="mt-2 text-2xl font-bold text-white drop-shadow sm:text-3xl">
+                {adSlot.name}
+              </h1>
+            </div>
           </div>
-          <span className={`rounded px-3 py-1 text-sm ${typeColors[adSlot.type] || 'bg-gray-100'}`}>
-            {adSlot.type}
-          </span>
+
+          {adSlot.publisher && (
+            <div className="flex flex-wrap items-start gap-3 rounded-xl border border-[--color-border] bg-[--color-surface] p-4">
+              <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-[--color-primary]/15 text-[--color-primary]">
+                <IconShieldCheck className="h-6 w-6" />
+              </div>
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-wide text-[--color-muted]">
+                  Published by
+                </p>
+                <p className="text-lg font-semibold text-[--color-foreground]">
+                  {adSlot.publisher.name}
+                </p>
+                {adSlot.publisher.website && (
+                  <a
+                    href={adSlot.publisher.website}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="mt-1 text-sm font-medium text-[--color-primary] hover:underline"
+                  >
+                    Visit publisher site
+                  </a>
+                )}
+                <p className="mt-2 text-sm text-[--color-muted]">
+                  You&apos;re booking directly with this publisher. They&apos;ll confirm timing,
+                  creative requirements, and next steps after you reserve.
+                </p>
+              </div>
+            </div>
+          )}
+
+          {adSlot.description && (
+            <div>
+              <h2 className="text-lg font-semibold text-[--color-foreground]">About this placement</h2>
+              <p className="mt-2 text-[--color-muted]">{adSlot.description}</p>
+            </div>
+          )}
+
+          <div>
+            <h2 className="text-lg font-semibold text-[--color-foreground]">What you get</h2>
+            <ul className="mt-3 space-y-2">
+              {bullets.map((line) => (
+                <li key={line} className="flex gap-2 text-sm text-[--color-muted]">
+                  <IconCheckCircle className="mt-0.5 h-4 w-4 shrink-0 text-[--color-primary]" />
+                  <span>{line}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
 
-        {adSlot.description && <p className="mb-6 text-[--color-muted]">{adSlot.description}</p>}
+        <aside className="lg:sticky lg:top-24">
+          <div className="space-y-4 rounded-xl border-2 border-[--color-primary]/25 bg-[--color-background] p-6 shadow-[--shadow-card]">
+            <div className="flex items-start justify-between gap-3">
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-wide text-[--color-muted]">
+                  Investment
+                </p>
+                <p className="text-3xl font-bold text-[--color-primary]">
+                  ${Number(adSlot.basePrice).toLocaleString()}
+                  <span className="text-lg font-semibold text-[--color-muted]">/mo</span>
+                </p>
+              </div>
+            </div>
 
-        <div className="flex items-center justify-between border-t border-[--color-border] pt-4">
-          <div>
-            <span
-              className={`text-sm font-medium ${adSlot.isAvailable ? 'text-green-600' : 'text-[--color-muted]'}`}
-            >
-              {adSlot.isAvailable ? '● Available' : '○ Currently Booked'}
-            </span>
+            <div className="rounded-lg bg-[--color-surface] px-3 py-2">
+              <p
+                className={`text-sm font-semibold ${adSlot.isAvailable ? 'text-green-700' : 'text-[--color-muted]'}`}
+              >
+                {adSlot.isAvailable ? '● Available — reserve to lock in this slot' : '○ Currently booked'}
+              </p>
+              {adSlot.isAvailable && (
+                <p className="mt-1 text-xs text-[--color-muted]">
+                  Popular placements can fill quickly. Reserving starts the conversation with the
+                  publisher — no payment is processed in this demo.
+                </p>
+              )}
+            </div>
+
             {!adSlot.isAvailable && !bookingSuccess && isListingPublisher && (
               <button
                 type="button"
                 onClick={handleUnbook}
-                className="ml-3 text-sm text-[--color-primary] underline hover:opacity-80"
+                className="w-full text-sm font-medium text-[--color-primary] underline hover:opacity-80"
               >
-                Reset listing
+                Reset listing (publisher)
               </button>
             )}
-          </div>
-          <div className="text-right">
-            <p className="text-2xl font-bold text-[--color-primary]">
-              ${Number(adSlot.basePrice).toLocaleString()}
-            </p>
-            <p className="text-sm text-[--color-muted]">per month</p>
-          </div>
-        </div>
 
-        {adSlot.isAvailable && !bookingSuccess && (
-          <div className="mt-6 border-t border-[--color-border] pt-6">
-            <h2 className="mb-4 text-lg font-semibold">Request This Placement</h2>
+            {adSlot.isAvailable && !bookingSuccess && (
+              <>
+                {roleLoading ? (
+                  <div className="py-4 text-center text-sm text-[--color-muted]">Loading account…</div>
+                ) : canBookAsSponsor ? (
+                  <div className="space-y-4 border-t border-[--color-border] pt-4">
+                    <div>
+                      <p className="text-xs font-semibold uppercase tracking-wide text-[--color-muted]">
+                        Your organization
+                      </p>
+                      <p className="font-medium text-[--color-foreground]">
+                        {roleInfo.name || user?.name}
+                      </p>
+                    </div>
+                    <div>
+                      <label
+                        htmlFor="message"
+                        className="mb-1 block text-sm font-medium text-[--color-foreground]"
+                      >
+                        Note to publisher <span className="font-normal text-[--color-muted]">(optional)</span>
+                      </label>
+                      <textarea
+                        id="message"
+                        value={message}
+                        onChange={(e) => setMessage(e.target.value)}
+                        placeholder="Campaign goals, timing, or creative ideas…"
+                        className="w-full rounded-lg border border-[--color-border] bg-[--color-background] px-3 py-2 text-[--color-foreground] placeholder:text-[--color-muted] focus:border-[--color-primary] focus:outline-none focus:ring-2 focus:ring-[--color-primary]/20"
+                        rows={3}
+                      />
+                    </div>
+                    {bookingError && <p className="text-sm text-red-600">{bookingError}</p>}
+                    <button
+                      type="button"
+                      data-analytics="booking-cta"
+                      onClick={handleBooking}
+                      disabled={booking}
+                      className="w-full rounded-xl bg-[--color-primary] px-4 py-3.5 text-base font-bold text-white shadow-md transition-colors hover:bg-[--color-primary-hover] disabled:opacity-50"
+                    >
+                      {booking ? 'Reserving…' : 'Reserve this placement'}
+                    </button>
+                    <p className="text-center text-xs text-[--color-muted]">
+                      We&apos;ll notify the publisher instantly. You can coordinate details in your
+                      campaigns dashboard.
+                    </p>
+                  </div>
+                ) : (
+                  <div className="space-y-3 border-t border-[--color-border] pt-4">
+                    {user && roleInfo?.role === 'publisher' ? (
+                      <p className="text-sm text-[--color-muted]">
+                        Publishers can&apos;t book placements. Switch to a sponsor account to buy
+                        inventory, or browse other listings.
+                      </p>
+                    ) : (
+                      <>
+                        <p className="text-sm text-[--color-foreground]">
+                          Sign in as a <strong>sponsor</strong> to reserve this placement and message
+                          the publisher.
+                        </p>
+                        <Link
+                          href={`/login?next=${encodeURIComponent(`/marketplace/${adSlot.id}`)}`}
+                          className="flex w-full items-center justify-center rounded-xl bg-[--color-primary] px-4 py-3.5 text-base font-bold text-white shadow-md transition-colors hover:bg-[--color-primary-hover]"
+                        >
+                          Log in to continue
+                        </Link>
+                        <p className="text-center text-xs text-[--color-muted]">
+                          New here? Use the demo sponsor account from the login page.
+                        </p>
+                      </>
+                    )}
+                  </div>
+                )}
+              </>
+            )}
 
-            {roleLoading ? (
-              <div className="py-4 text-center text-[--color-muted]">Loading...</div>
-            ) : roleInfo?.role === 'sponsor' && roleInfo?.sponsorId ? (
-              <div className="space-y-4">
-                <div>
-                  <label className="mb-1 block text-sm font-medium text-[--color-muted]">
-                    Your Company
-                  </label>
-                  <p className="text-[--color-foreground]">{roleInfo.name || user?.name}</p>
-                </div>
-                <div>
-                  <label
-                    htmlFor="message"
-                    className="mb-1 block text-sm font-medium text-[--color-muted]"
-                  >
-                    Message to Publisher (optional)
-                  </label>
-                  <textarea
-                    id="message"
-                    value={message}
-                    onChange={(e) => setMessage(e.target.value)}
-                    placeholder="Tell the publisher about your campaign goals..."
-                    className="w-full rounded-lg border border-[--color-border] bg-[--color-background] px-3 py-2 text-[--color-foreground] placeholder:text-[--color-muted] focus:border-[--color-primary] focus:outline-none focus:ring-1 focus:ring-[--color-primary]"
-                    rows={3}
-                  />
-                </div>
-                {bookingError && <p className="text-sm text-red-600">{bookingError}</p>}
-                <button
-                  onClick={handleBooking}
-                  disabled={booking}
-                  className="w-full rounded-lg bg-[--color-primary] px-4 py-3 font-semibold text-white transition-colors hover:opacity-90 disabled:opacity-50"
-                >
-                  {booking ? 'Booking...' : 'Book This Placement'}
-                </button>
-              </div>
-            ) : (
-              <div>
-                <button
-                  disabled
-                  className="w-full cursor-not-allowed rounded-lg bg-gray-300 px-4 py-3 font-semibold text-gray-500"
-                >
-                  Request This Placement
-                </button>
-                <p className="mt-2 text-center text-sm text-[--color-muted]">
-                  {user
-                    ? 'Only sponsors can request placements'
-                    : 'Log in as a sponsor to request this placement'}
+            {bookingSuccess && (
+              <div className="rounded-lg border border-green-200 bg-green-50 p-4">
+                <h3 className="font-semibold text-green-800">You&apos;re on the list</h3>
+                <p className="mt-1 text-sm text-green-800">
+                  Your reservation is in. The publisher will follow up with next steps.
+                </p>
+                <p className="mt-3 text-xs text-green-800">
+                  Only this publisher can mark the slot available again from their dashboard.
                 </p>
               </div>
             )}
           </div>
-        )}
-
-        {bookingSuccess && (
-          <div className="mt-6 rounded-lg border border-green-200 bg-green-50 p-4">
-            <h3 className="font-semibold text-green-800">Placement Booked!</h3>
-            <p className="mt-1 text-sm text-green-700">
-              Your request has been submitted. The publisher will be in touch soon.
-            </p>
-            <p className="mt-3 text-xs text-green-700">
-              Only the listing publisher can mark this placement available again from their dashboard or this page
-              when signed in as that publisher.
-            </p>
-          </div>
-        )}
+        </aside>
       </div>
     </div>
   );

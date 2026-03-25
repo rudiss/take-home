@@ -1,17 +1,23 @@
 function SkeletonCard() {
   return (
-    <div className="animate-pulse rounded-xl bg-[--color-background] p-5 shadow-[--shadow-card]">
-      <div className="mb-3 flex items-start justify-between">
-        <div className="h-5 w-32 rounded bg-gray-200" />
-        <div className="h-5 w-16 rounded-full bg-gray-200" />
+    <div className="animate-pulse space-y-4 py-2">
+      <div className="flex justify-between gap-3">
+        <div className="h-6 w-40 rounded bg-slate-800" />
+        <div className="h-5 w-16 rounded-full bg-slate-800" />
       </div>
-      <div className="mb-4 space-y-2">
-        <div className="h-3 w-full rounded bg-gray-100" />
-        <div className="h-3 w-2/3 rounded bg-gray-100" />
+      <div className="space-y-2">
+        <div className="h-3 w-full rounded bg-slate-800/80" />
+        <div className="h-3 w-4/5 rounded bg-slate-800/80" />
       </div>
-      <div className="mb-4 flex justify-between">
-        <div className="h-4 w-16 rounded bg-gray-100" />
-        <div className="h-5 w-20 rounded bg-gray-100" />
+      <div className="flex justify-between">
+        <div className="h-4 w-24 rounded bg-slate-800" />
+        <div className="h-6 w-20 rounded bg-slate-800" />
+      </div>
+      <div className="border-t border-slate-800 pt-4">
+        <div className="flex gap-6">
+          <div className="h-4 w-10 rounded bg-slate-800" />
+          <div className="h-4 w-14 rounded bg-slate-800" />
+        </div>
       </div>
     </div>
   );
@@ -21,20 +27,21 @@ export default function Loading() {
   return (
     <div className="space-y-8">
       <div>
-        <div className="h-8 w-40 animate-pulse rounded bg-gray-200" />
-        <div className="mt-2 h-4 w-64 animate-pulse rounded bg-gray-100" />
+        <div className="h-9 w-48 animate-pulse rounded bg-slate-800" />
+        <div className="mt-2 h-4 w-72 max-w-full animate-pulse rounded bg-slate-800/70" />
       </div>
 
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="flex flex-wrap gap-x-8 gap-y-2 border-b border-slate-800/80 pb-6">
         {Array.from({ length: 4 }).map((_, i) => (
-          <div key={i} className="animate-pulse rounded-xl bg-[--color-background] p-5 shadow-[--shadow-card]">
-            <div className="h-3 w-20 rounded bg-gray-100" />
-            <div className="mt-2 h-7 w-16 rounded bg-gray-200" />
-          </div>
+          <div key={i} className="h-5 w-36 animate-pulse rounded bg-slate-800" />
         ))}
       </div>
 
-      <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="flex justify-end">
+        <div className="h-5 w-32 animate-pulse rounded bg-slate-800" />
+      </div>
+
+      <div className="grid grid-cols-1 gap-y-12 md:grid-cols-3 md:gap-x-12 md:gap-y-16">
         <SkeletonCard />
         <SkeletonCard />
         <SkeletonCard />

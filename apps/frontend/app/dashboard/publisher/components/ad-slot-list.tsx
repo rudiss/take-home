@@ -4,6 +4,11 @@ import { useState, useCallback } from 'react';
 import type { AdSlot } from '@/lib/types';
 import { AdSlotCard } from './ad-slot-card';
 import { AdSlotForm } from './ad-slot-form';
+import {
+  newSlotTriggerTv,
+  publisherEmptyStateTv,
+  publisherToolbarTv,
+} from '../publisher-dashboard.styles';
 
 interface AdSlotListProps {
   adSlots: AdSlot[];
@@ -20,38 +25,61 @@ export function AdSlotList({ adSlots }: Readonly<AdSlotListProps>) {
     setEditingSlot(adSlot);
   }, []);
 
+  const toolbar = publisherToolbarTv();
+  const empty = publisherEmptyStateTv();
+  const newLink = newSlotTriggerTv;
+
   return (
     <div className="space-y-6">
-      <div className="flex justify-end">
+      <div className={toolbar.bar()}>
+        <p className={toolbar.hint()}>
+          Slots appear on the public marketplace when marked available. Edit anytime to refine your
+          pitch and pricing.
+        </p>
         <button
           type="button"
           onClick={() => {
             setEditingSlot(null);
-            setShowCreate(!showCreate);
+            setShowCreate((o) => !o);
           }}
-          className="rounded-lg bg-[--color-primary] px-5 py-2.5 text-sm font-medium text-white transition-colors hover:bg-[--color-primary-hover]"
+          className={newLink({ open: showCreate })}
+          aria-expanded={showCreate}
         >
-          {showCreate ? 'Cancel' : '+ New Ad Slot'}
+          {showCreate ? 'Close' : '+ New Ad Slot'}
         </button>
       </div>
 
-      {showCreate && <AdSlotForm onClose={handleCloseCreate} />}
+      {showCreate && (
+        <div className="max-w-2xl">
+          <AdSlotForm onClose={handleCloseCreate} />
+        </div>
+      )}
 
       {adSlots.length === 0 && !showCreate ? (
-        <div className="rounded-xl bg-[--color-background] p-12 text-center shadow-[--shadow-card]">
-          <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-[--color-primary]/10">
-            <span className="text-xl text-[--color-primary]">+</span>
+        <div className={empty.root()}>
+          <div className={empty.iconWrap()}>
+            <span className={empty.icon()} aria-hidden>
+              +
+            </span>
           </div>
-          <h3 className="mb-1 font-semibold">No ad slots yet</h3>
-          <p className="text-sm text-[--color-muted]">
-            Create your first ad slot to start earning.
+          <h3 className={empty.title()}>No ad slots yet</h3>
+          <p className={empty.body()}>
+            Create your first slot to show up in the marketplace and start receiving sponsor
+            interest.
           </p>
+          <button type="button" onClick={() => setShowCreate(true)} className={empty.cta()}>
+            Create your first slot
+          </button>
         </div>
       ) : (
-        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid grid-cols-1 gap-y-12 md:grid-cols-3 md:gap-x-12 md:gap-y-16">
           {adSlots.map((slot) =>
             editingSlot?.id === slot.id ? (
-              <AdSlotForm key={slot.id} adSlot={slot} onClose={handleCloseEdit} />
+              <div key={slot.id} className="md:col-span-3">
+                <div className="max-w-2xl">
+                  <AdSlotForm adSlot={slot} onClose={handleCloseEdit} />
+                </div>
+              </div>
             ) : (
               <AdSlotCard key={slot.id} adSlot={slot} onEdit={handleEdit} />
             ),
