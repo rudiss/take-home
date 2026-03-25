@@ -104,21 +104,21 @@ export function LandingPage() {
     <main className="pb-16 pt-2 sm:pb-24 sm:pt-4">
       {/* Hero */}
       <section
-        className="relative overflow-hidden rounded-3xl border border-[--color-border] bg-linear-to-br from-indigo-50/90 via-[--color-background] to-emerald-50/80 px-6 py-14 shadow-[--shadow-lg] sm:px-10 sm:py-16 lg:px-14 lg:py-20 dark:from-indigo-950/40 dark:via-[--color-background] dark:to-emerald-950/30"
+        className="relative overflow-hidden rounded-3xl border border-(--color-border) bg-linear-to-br from-indigo-50/90 via-(--color-background) to-emerald-50/80 px-6 py-14 shadow-[--shadow-lg] sm:px-10 sm:py-16 lg:px-14 lg:py-20 dark:from-indigo-950/40 dark:via-(--color-background) dark:to-emerald-950/30"
         aria-labelledby="hero-heading"
       >
         <div className="mx-auto grid max-w-6xl gap-12 lg:grid-cols-2 lg:items-center lg:gap-16">
           <header className="text-center lg:text-left">
-            <p className="mb-4 text-sm font-semibold uppercase tracking-wider text-[--color-primary]">
+            <p className="mb-4 text-sm font-semibold uppercase tracking-wider text-(--color-primary)">
               Sponsorship marketplace
             </p>
             <h1
               id="hero-heading"
-              className="text-balance text-4xl font-bold tracking-tight text-[--color-foreground] sm:text-5xl lg:text-[3.25rem] lg:leading-[1.1]"
+              className="text-balance text-4xl font-bold tracking-tight text-(--color-foreground) sm:text-5xl lg:text-[3.25rem] lg:leading-[1.1]"
             >
               Connect your brand with audiences that actually care
             </h1>
-            <p className="mx-auto mt-5 max-w-xl text-pretty text-lg text-[--color-muted] lg:mx-0">
+            <p className="mx-auto mt-5 max-w-xl text-pretty text-lg text-(--color-muted) lg:mx-0">
               Anvara matches sponsors with trusted publishers—so campaigns feel native, measurable,
               and worth every dollar.
             </p>
@@ -133,7 +133,7 @@ export function LandingPage() {
                 Browse marketplace
               </Link>
             </nav>
-            <p className="mt-6 text-sm text-[--color-muted]">
+            <p className="mt-6 text-sm text-(--color-muted)">
               No credit card required for demo accounts · Set up in under a minute
             </p>
           </header>
@@ -149,7 +149,7 @@ export function LandingPage() {
           <h2 id="features-heading" className={sectionHeading()}>
             Built for both sides of the deal
           </h2>
-          <p className="mt-4 text-lg text-[--color-muted]">
+          <p className="mt-4 text-lg text-(--color-muted)">
             Whether you buy placements or sell them, Anvara keeps discovery, pricing, and handoffs
             straightforward.
           </p>
@@ -161,8 +161,8 @@ export function LandingPage() {
               <div className={featureIcon({ color })}>
                 <Icon className="h-6 w-6" />
               </div>
-              <h3 className="text-lg font-semibold text-[--color-foreground]">{title}</h3>
-              <p className="mt-2 text-[--color-muted]">{description}</p>
+              <h3 className="text-lg font-semibold text-(--color-foreground)">{title}</h3>
+              <p className="mt-2 text-(--color-muted)">{description}</p>
             </li>
           ))}
         </ul>
@@ -170,14 +170,14 @@ export function LandingPage() {
 
       {/* How it works */}
       <section
-        className="mx-auto mt-20 max-w-6xl rounded-3xl border border-[--color-border] bg-[--color-surface] px-6 py-14 sm:mt-28 sm:px-10 sm:py-16"
+        className="mx-auto mt-20 max-w-6xl rounded-3xl border border-(--color-border) bg-(--color-surface) px-6 py-14 sm:mt-28 sm:px-10 sm:py-16"
         aria-labelledby="how-heading"
       >
         <header className="mx-auto max-w-2xl text-center">
           <h2 id="how-heading" className={sectionHeading()}>
             How it works
           </h2>
-          <p className="mt-4 text-lg text-[--color-muted]">
+          <p className="mt-4 text-lg text-(--color-muted)">
             Three steps—from discovery to a confirmed placement.
           </p>
         </header>
@@ -190,8 +190,8 @@ export function LandingPage() {
               <span className={stepBadge()} aria-hidden="true">
                 {number}
               </span>
-              <h3 className="text-lg font-semibold text-[--color-foreground]">{title}</h3>
-              <p className="mt-2 text-sm text-[--color-muted]">{description}</p>
+              <h3 className="text-lg font-semibold text-(--color-foreground)">{title}</h3>
+              <p className="mt-2 text-sm text-(--color-muted)">{description}</p>
             </li>
           ))}
         </ol>
@@ -199,7 +199,7 @@ export function LandingPage() {
 
       {/* CTA */}
       <section className="mx-auto mt-20 max-w-6xl sm:mt-28" aria-labelledby="cta-heading">
-        <div className="overflow-hidden rounded-3xl bg-linear-to-br from-[--color-primary] to-indigo-700 px-8 py-14 text-center text-white shadow-[--shadow-lg] sm:px-12 sm:py-16">
+        <div className="overflow-hidden rounded-3xl bg-linear-to-br from-(--color-primary) to-indigo-700 px-8 py-14 text-center text-white shadow-[--shadow-lg] sm:px-12 sm:py-16">
           <h2 id="cta-heading" className="text-3xl font-bold tracking-tight sm:text-4xl">
             Ready to grow with the right partners?
           </h2>

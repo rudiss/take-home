@@ -29,7 +29,7 @@ export function NavThemeToggle() {
     <button
       type="button"
       onClick={toggle}
-      className="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-[--color-border] text-[--color-muted] transition-colors hover:bg-[--color-surface] hover:text-[--color-foreground] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[--color-primary]"
+      className="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-(--color-border) text-(--color-muted) transition-colors hover:bg-(--color-surface) hover:text-(--color-foreground) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--color-primary)"
       aria-label={theme === 'light' ? 'Switch to dark mode' : 'Switch to light mode'}
     >
       {theme === 'light' ? (

@@ -15,12 +15,12 @@ export const deleteButtonTriggerTv = tv({
 
 export const deleteDialogTv = tv({
   slots: {
-    root: 'z-[200] rounded-xl border border-[--color-border] bg-[--color-background] p-6 shadow-[--shadow-lg]',
-    title: 'text-lg font-semibold text-[--color-foreground]',
-    description: 'mt-2 text-sm text-[--color-muted]',
+    root: 'z-[200] rounded-xl border border-(--color-border) bg-(--color-background) p-6 shadow-[--shadow-lg]',
+    title: 'text-lg font-semibold text-(--color-foreground)',
+    description: 'mt-2 text-sm text-(--color-muted)',
     form: 'mt-6 flex items-center justify-end gap-3',
     cancel:
-      'rounded-lg border border-[--color-border] px-4 py-2 text-sm font-medium transition-colors hover:bg-[--color-surface]',
+      'rounded-lg border border-(--color-border) px-4 py-2 text-sm font-medium transition-colors hover:bg-(--color-surface)',
     submit:
       'rounded-lg bg-red-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-red-700 disabled:opacity-50',
     error: 'mt-2 text-xs text-red-600',
@@ -32,7 +32,7 @@ export const submitButtonTv = tv({
   variants: {
     variant: {
       primary:
-        'font-medium bg-[--color-primary] text-white hover:bg-[--color-primary-hover] focus-visible:outline-[--color-primary]',
+        'font-medium bg-(--color-primary) text-white hover:bg-(--color-primary-hover) focus-visible:outline-(--color-primary)',
       sky: 'font-semibold bg-sky-500 text-white hover:bg-sky-400 focus-visible:outline-sky-500',
     },
   },

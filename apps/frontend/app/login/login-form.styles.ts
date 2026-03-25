@@ -5,19 +5,19 @@ export const page = tv({
 });
 
 export const card = tv({
-  base: 'w-full max-w-sm rounded-2xl border border-[--color-border] bg-[--color-background] p-8 shadow-[--shadow-lg]',
+  base: 'w-full max-w-sm rounded-2xl border border-(--color-border) bg-(--color-background) p-8 shadow-[--shadow-lg]',
 });
 
 export const logo = tv({
-  base: 'mx-auto flex h-12 w-12 items-center justify-center rounded-xl bg-linear-to-br from-[--color-primary] to-indigo-500 text-lg font-bold text-white shadow-sm',
+  base: 'mx-auto flex h-12 w-12 items-center justify-center rounded-xl bg-linear-to-br from-(--color-primary) to-indigo-500 text-lg font-bold text-white shadow-sm',
 });
 
 export const heading = tv({
-  base: 'mt-4 text-center text-2xl font-bold tracking-tight text-[--color-foreground]',
+  base: 'mt-4 text-center text-2xl font-bold tracking-tight text-(--color-foreground)',
 });
 
 export const subtitle = tv({
-  base: 'mt-1 text-center text-sm text-[--color-muted]',
+  base: 'mt-1 text-center text-sm text-(--color-muted)',
 });
 
 export const alert = tv({
@@ -31,15 +31,15 @@ export const alert = tv({
 });
 
 export const fieldLabel = tv({
-  base: 'block text-sm font-medium text-[--color-foreground]',
+  base: 'block text-sm font-medium text-(--color-foreground)',
 });
 
 export const roleOption = tv({
   base: 'flex cursor-pointer items-center gap-3 rounded-xl border-2 px-4 py-3 transition-colors',
   variants: {
     selected: {
-      true: 'border-[--color-primary] bg-[--color-primary]/5',
-      false: 'border-[--color-border] bg-[--color-background] hover:border-[--color-muted]/50',
+      true: 'border-(--color-primary) bg-(--color-primary)/5',
+      false: 'border-(--color-border) bg-(--color-background) hover:border-(--color-muted)/50',
     },
   },
 });
@@ -55,5 +55,5 @@ export const roleIcon = tv({
 });
 
 export const submitButton = tv({
-  base: 'flex w-full items-center justify-center gap-2 rounded-xl border border-[--color-primary-hover] bg-[--color-primary] px-4 py-3.5 text-sm font-semibold text-white shadow-md transition-all hover:bg-[--color-primary-hover] hover:shadow-lg focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[--color-primary] active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50',
+  base: 'flex w-full items-center justify-center gap-2 rounded-xl border border-(--color-primary-hover) bg-(--color-primary) px-4 py-3.5 text-sm font-semibold text-white shadow-md transition-all hover:bg-(--color-primary-hover) hover:shadow-lg focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--color-primary) active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50',
 });

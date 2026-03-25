@@ -158,7 +158,7 @@ export function LoginForm() {
         <form onSubmit={handleSubmit} className="mt-6 space-y-5">
           {/* Role picker */}
           <fieldset>
-            <legend className="mb-2 text-sm font-medium text-[--color-foreground]">
+            <legend className="mb-2 text-sm font-medium text-(--color-foreground)">
               Choose account
             </legend>
             <div className="grid gap-2" role="radiogroup" aria-labelledby={groupId}>
@@ -179,12 +179,12 @@ export function LoginForm() {
                       <Icon className="h-5 w-5" />
                     </div>
                     <div className="min-w-0">
-                      <p className="text-sm font-semibold text-[--color-foreground]">{r.label}</p>
-                      <p className="text-xs text-[--color-muted]">{r.description}</p>
+                      <p className="text-sm font-semibold text-(--color-foreground)">{r.label}</p>
+                      <p className="text-xs text-(--color-muted)">{r.description}</p>
                     </div>
                     {isSelected ? (
                       <svg
-                        className="ml-auto h-5 w-5 shrink-0 text-[--color-primary]"
+                        className="ml-auto h-5 w-5 shrink-0 text-(--color-primary)"
                         viewBox="0 0 20 20"
                         fill="currentColor"
                         aria-hidden="true"
@@ -203,7 +203,7 @@ export function LoginForm() {
           </fieldset>
 
           {/* Credentials hint */}
-          <p className="text-center text-xs text-[--color-muted]">
+          <p className="text-center text-xs text-(--color-muted)">
             Demo account: <span className="font-medium">{selected.email}</span>
           </p>
 

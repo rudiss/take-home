@@ -5,7 +5,7 @@ export default function LoginPage() {
   return (
     <Suspense
       fallback={
-        <div className="flex min-h-screen items-center justify-center text-[--color-muted]">
+        <div className="flex min-h-screen items-center justify-center text-(--color-muted)">
           Loading…
         </div>
       }
