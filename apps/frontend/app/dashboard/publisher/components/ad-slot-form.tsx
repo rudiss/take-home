@@ -1,6 +1,6 @@
 'use client';
 
-import { useActionState, useEffect } from 'react';
+import { useActionState, useEffect, type RefObject } from 'react';
 import type { AdSlot } from '@/lib/types';
 import type { DashboardActionState } from '../../action-types';
 import { createAdSlotAction, updateAdSlotAction } from '../actions';
@@ -10,28 +10,44 @@ import { publisherFormTv } from '../publisher-dashboard.styles';
 interface AdSlotFormProps {
   adSlot?: AdSlot;
   onClose: () => void;
+  dialogRef?: RefObject<HTMLDialogElement | null>;
 }
 
 const initialState: DashboardActionState = {};
 
-export function AdSlotForm({ adSlot, onClose }: Readonly<AdSlotFormProps>) {
+export function AdSlotForm({ adSlot, onClose, dialogRef }: Readonly<AdSlotFormProps>) {
   const action = adSlot ? updateAdSlotAction : createAdSlotAction;
   const [state, formAction] = useActionState(action, initialState);
   const form = publisherFormTv();
 
   useEffect(() => {
-    if (state.success) onClose();
-  }, [state.success, onClose]);
+    if (state.success) {
+      dialogRef?.current?.close();
+      onClose();
+    }
+  }, [state.success, onClose, dialogRef]);
+
+  const handleClose = () => {
+    dialogRef?.current?.close();
+    onClose();
+  };
 
   return (
     <form action={formAction} className={form.root()}>
       <div className={form.header()}>
-        <h3 className={form.title()}>{adSlot ? 'Edit Ad Slot' : 'New Ad Slot'}</h3>
-        <p className={form.subtitle()}>
-          {adSlot
-            ? 'Changes apply on the marketplace as soon as you save.'
-            : 'Add a clear name and description so sponsors understand the placement.'}
-        </p>
+        <div>
+          <h3 className={form.title()}>{adSlot ? 'Edit Ad Slot' : 'New Ad Slot'}</h3>
+          <p className={form.subtitle()}>
+            {adSlot
+              ? 'Changes apply on the marketplace as soon as you save.'
+              : 'Add a clear name and description so sponsors understand the placement.'}
+          </p>
+        </div>
+        <button type="button" onClick={handleClose} className={form.closeButton()} aria-label="Close">
+          <svg viewBox="0 0 20 20" fill="currentColor" className="h-5 w-5" aria-hidden="true">
+            <path d="M6.28 5.22a.75.75 0 00-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 101.06 1.06L10 11.06l3.72 3.72a.75.75 0 101.06-1.06L11.06 10l3.72-3.72a.75.75 0 00-1.06-1.06L10 8.94 6.28 5.22z" />
+          </svg>
+        </button>
       </div>
 
       {state.error && <div className={form.errorBanner()}>{state.error}</div>}
@@ -113,7 +129,7 @@ export function AdSlotForm({ adSlot, onClose }: Readonly<AdSlotFormProps>) {
           pendingLabel="Saving…"
           variant="sky"
         />
-        <button type="button" onClick={onClose} className={form.cancelButton()}>
+        <button type="button" onClick={handleClose} className={form.cancelButton()}>
           Cancel
         </button>
       </div>

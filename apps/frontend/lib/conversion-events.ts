@@ -3,7 +3,10 @@ export type MarketplaceAnalyticsEvent =
   | { name: 'listing_card_click'; slotId: string }
   | { name: 'listing_detail_view'; slotId: string }
   | { name: 'booking_cta_click'; slotId: string }
-  | { name: 'booking_submit_success'; slotId: string };
+  | { name: 'booking_submit_success'; slotId: string }
+  | { name: 'quote_modal_open'; slotId: string }
+  | { name: 'quote_submit'; slotId: string }
+  | { name: 'quote_submit_success'; slotId: string; quoteId: string };
 
 /**
  * Fire-and-forget hook for product analytics. Replace body with Segment/GA4/PostHog.

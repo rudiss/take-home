@@ -45,7 +45,7 @@ export const adSlotCardTv = tv({
     root: 'flex h-full flex-col space-y-4 py-2',
     topRow: 'flex items-start justify-between gap-3',
     title: 'min-w-0 flex-1 text-base font-bold leading-snug text-white sm:text-lg',
-    description: 'min-h-[3.5rem] text-sm leading-relaxed text-slate-400 line-clamp-3 sm:line-clamp-4',
+    description: 'min-h-14 text-sm leading-relaxed text-slate-400 line-clamp-3 sm:line-clamp-4',
     metaRow: 'flex flex-wrap items-center justify-between gap-3',
     statusLine: 'inline-flex items-center gap-2 text-sm font-medium',
     statusDot: 'h-2 w-2 shrink-0 rounded-full',
@@ -86,9 +86,12 @@ export const publisherEmptyStateTv = tv({
 
 export const publisherFormTv = tv({
   slots: {
-    root: 'space-y-5 rounded-xl border border-slate-700 bg-slate-900/60 p-6 shadow-lg backdrop-blur-sm sm:p-8',
-    header: 'border-b border-slate-700 pb-4',
+    dialog: 'rounded-2xl border border-slate-700 bg-slate-900 p-0 shadow-[--shadow-lg]',
+    root: 'space-y-5 p-6 sm:p-8',
+    header: 'flex items-center justify-between border-b border-slate-700 pb-4',
     title: 'text-lg font-semibold text-white',
+    closeButton:
+      'flex h-8 w-8 items-center justify-center rounded-lg text-slate-400 transition-colors hover:bg-slate-800 hover:text-white',
     subtitle: 'mt-1 text-sm text-slate-500',
     fieldGrid: 'grid grid-cols-1 gap-4 sm:grid-cols-2',
     errorBanner: 'rounded-lg border border-red-500/30 bg-red-950/50 p-3 text-sm text-red-200',
@@ -183,6 +186,6 @@ export const publisherErrorTv = tv({
     title: 'mb-2 text-lg font-semibold text-white',
     body: 'mb-6 text-sm text-slate-400',
     retry:
-      'rounded-lg bg-sky-500 px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-sky-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-400',
+      'rounded-lg bg-sky-500 px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-sky-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-400',
   },
 });

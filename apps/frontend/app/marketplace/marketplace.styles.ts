@@ -166,3 +166,47 @@ export const adSlotDetailSidebarStatusTv = tv({
     available: false,
   },
 });
+
+export const quoteRequestSidebarTv = tv({
+  slots: {
+    section: 'space-y-2 border-t border-(--color-border) pt-4',
+    hint: 'text-xs text-(--color-muted)',
+  },
+});
+
+export const quoteRequestDialogTv = tv({
+  slots: {
+    dialog:
+      'z-[200] w-[calc(100vw-2rem)] max-w-lg rounded-xl border border-(--color-border) bg-(--color-background) p-0 shadow-[--shadow-lg] [&::backdrop]:bg-black/40 [&::backdrop]:backdrop-blur-sm',
+    header: 'border-b border-(--color-border) px-5 py-4',
+    title: 'text-lg font-semibold text-(--color-foreground)',
+    subtitle: 'mt-1 text-sm text-(--color-muted)',
+    priceContext: 'mt-2 rounded-lg bg-(--color-surface) px-3 py-2 text-sm text-(--color-foreground)',
+    priceLabel: 'text-xs font-medium uppercase tracking-wide text-(--color-muted)',
+    body: 'max-h-[min(70vh,32rem)] overflow-y-auto px-5 py-4',
+    field: 'mb-4',
+    label: 'mb-1 block text-sm font-medium text-(--color-foreground)',
+    optional: 'font-normal text-(--color-muted)',
+    input:
+      'w-full rounded-lg border border-(--color-border) bg-(--color-background) px-3 py-2 text-sm text-(--color-foreground) placeholder:text-(--color-muted) focus:border-(--color-primary) focus:outline-none focus:ring-2 focus:ring-(--color-primary)/20',
+    select: 'w-full rounded-lg border border-(--color-border) bg-(--color-background) px-3 py-2 text-sm text-(--color-foreground) focus:border-(--color-primary) focus:outline-none focus:ring-2 focus:ring-(--color-primary)/20',
+    textarea:
+      'w-full rounded-lg border border-(--color-border) bg-(--color-background) px-3 py-2 text-sm text-(--color-foreground) placeholder:text-(--color-muted) focus:border-(--color-primary) focus:outline-none focus:ring-2 focus:ring-(--color-primary)/20',
+    fieldError: 'mt-1 text-xs text-red-600',
+    apiError: 'mb-4 rounded-lg border border-red-200 bg-red-50 p-3 text-sm text-red-700',
+    footer: 'flex flex-wrap justify-end gap-2 border-t border-(--color-border) px-5 py-4',
+    trigger:
+      'w-full rounded-lg border border-(--color-border) bg-transparent px-4 py-2.5 text-sm font-semibold text-(--color-foreground) transition-colors hover:bg-(--color-surface) focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--color-primary)',
+    cancelButton:
+      'rounded-lg border border-(--color-border) px-4 py-2 text-sm font-medium text-(--color-foreground) transition-colors hover:bg-(--color-surface)',
+    submitButton:
+      'rounded-lg bg-(--color-primary) px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-(--color-primary-hover) disabled:opacity-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--color-primary)',
+    successTitle: 'text-lg font-semibold text-(--color-foreground)',
+    successBody: 'mt-2 text-sm text-(--color-muted)',
+    quoteId: 'mt-3 rounded-md bg-(--color-surface) px-3 py-2 font-mono text-xs text-(--color-foreground)',
+    nextSteps: 'mt-4 space-y-2 text-sm text-(--color-muted)',
+    nextStepItem: 'flex gap-2',
+    closeSuccessButton:
+      'mt-6 w-full rounded-lg bg-(--color-primary) px-4 py-2.5 text-sm font-semibold text-white hover:bg-(--color-primary-hover) focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--color-primary)',
+  },
+});

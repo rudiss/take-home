@@ -1,6 +1,6 @@
 'use client';
 
-import { useActionState, useEffect } from 'react';
+import { useActionState, useEffect, type RefObject } from 'react';
 import type { Campaign } from '@/lib/types';
 import type { DashboardActionState } from '../../action-types';
 import { createCampaignAction, updateCampaignAction } from '../actions';
@@ -10,6 +10,7 @@ import { campaignFormTv } from '../sponsor-dashboard.styles';
 interface CampaignFormProps {
   campaign?: Campaign;
   onClose: () => void;
+  dialogRef?: RefObject<HTMLDialogElement | null>;
 }
 
 function toDateInputValue(dateStr: string): string {
@@ -18,14 +19,22 @@ function toDateInputValue(dateStr: string): string {
 
 const initialState: DashboardActionState = {};
 
-export function CampaignForm({ campaign, onClose }: Readonly<CampaignFormProps>) {
+export function CampaignForm({ campaign, onClose, dialogRef }: Readonly<CampaignFormProps>) {
   const action = campaign ? updateCampaignAction : createCampaignAction;
   const [state, formAction] = useActionState(action, initialState);
   const form = campaignFormTv();
 
   useEffect(() => {
-    if (state.success) onClose();
-  }, [state.success, onClose]);
+    if (state.success) {
+      dialogRef?.current?.close();
+      onClose();
+    }
+  }, [state.success, onClose, dialogRef]);
+
+  const handleClose = () => {
+    dialogRef?.current?.close();
+    onClose();
+  };
 
   return (
     <form action={formAction} className={form.root()}>
@@ -33,6 +42,11 @@ export function CampaignForm({ campaign, onClose }: Readonly<CampaignFormProps>)
         <h3 className={form.title()}>
           {campaign ? 'Edit Campaign' : 'New Campaign'}
         </h3>
+        <button type="button" onClick={handleClose} className={form.closeButton()} aria-label="Close">
+          <svg viewBox="0 0 20 20" fill="currentColor" className="h-5 w-5" aria-hidden="true">
+            <path d="M6.28 5.22a.75.75 0 00-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 101.06 1.06L10 11.06l3.72 3.72a.75.75 0 101.06-1.06L11.06 10l3.72-3.72a.75.75 0 00-1.06-1.06L10 8.94 6.28 5.22z" />
+          </svg>
+        </button>
       </div>
 
       {state.error && <div className={form.errorBanner()}>{state.error}</div>}
@@ -143,7 +157,7 @@ export function CampaignForm({ campaign, onClose }: Readonly<CampaignFormProps>)
 
       <div className={form.footer()}>
         <SubmitButton label={campaign ? 'Update' : 'Create'} pendingLabel="Saving..." />
-        <button type="button" onClick={onClose} className={form.cancelButton()}>
+        <button type="button" onClick={handleClose} className={form.cancelButton()}>
           Cancel
         </button>
       </div>

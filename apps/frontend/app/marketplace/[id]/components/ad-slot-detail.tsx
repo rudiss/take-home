@@ -4,6 +4,7 @@ import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { adSlotImageUrl } from '@/lib/ad-slot-image';
+import { QuoteRequestDialog } from '../../components/quote-request-dialog';
 import { IconCheckCircle, IconShieldCheck } from '../../components/marketplace-icons';
 import { trackMarketplaceEvent } from '@/lib/conversion-events';
 import { formatSlotTypeLabel, slotValueBullets } from '@/lib/marketplace-ux';
@@ -15,6 +16,7 @@ import {
   adSlotDetailSidebarStatusTv,
   adSlotDetailTv,
   marketplaceTypeBadgeTv,
+  quoteRequestSidebarTv,
 } from '../../marketplace.styles';
 
 interface User {
@@ -38,6 +40,7 @@ interface Props {
 
 export function AdSlotDetail({ id }: Readonly<Props>) {
   const d = adSlotDetailTv();
+  const qs = quoteRequestSidebarTv();
   const [adSlot, setAdSlot] = useState<AdSlot | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -335,6 +338,20 @@ export function AdSlotDetail({ id }: Readonly<Props>) {
                 <p className={d.successNote()}>
                   Only this publisher can mark the slot available again from their dashboard.
                 </p>
+              </div>
+            )}
+
+            {!isListingPublisher && !bookingSuccess && (
+              <div className={qs.section()}>
+                <p className={qs.hint()}>Prefer to discuss pricing or a custom package first?</p>
+                <QuoteRequestDialog
+                  adSlotId={adSlot.id}
+                  listingTitle={adSlot.name}
+                  fromPriceMonthly={Number(adSlot.basePrice)}
+                  isAvailable={adSlot.isAvailable}
+                  defaultEmail={user?.email}
+                  defaultCompanyName={roleInfo?.role === 'sponsor' ? roleInfo.name : undefined}
+                />
               </div>
             )}
           </div>

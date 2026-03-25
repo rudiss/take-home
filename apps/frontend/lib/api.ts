@@ -49,3 +49,26 @@ export const createPlacement = (data: Record<string, unknown>, options?: Request
 // Dashboard
 export const getStats = (options?: RequestInit) =>
   api<Record<string, unknown>>('/api/dashboard/stats', options);
+
+export interface QuoteRequestBody {
+  adSlotId: string;
+  companyName: string;
+  email: string;
+  phone?: string;
+  budgetRange?: string;
+  timeline?: string;
+  campaignDetails: string;
+  specialRequirements?: string;
+}
+
+export interface QuoteRequestResponse {
+  success: true;
+  quoteId: string;
+}
+
+export const requestQuote = (body: QuoteRequestBody, options?: RequestInit) =>
+  api<QuoteRequestResponse>('/api/quotes/request', {
+    method: 'POST',
+    body: JSON.stringify(body),
+    ...options,
+  });

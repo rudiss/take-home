@@ -134,3 +134,40 @@ export function parseOptionalBoolean(value: unknown): { ok: true; value?: boolea
   }
   return { ok: true, value };
 }
+
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+export function parseRequiredEmail(
+  value: unknown,
+  field: string
+): { ok: true; value: string } | { ok: false; error: string } {
+  if (value === undefined || value === null) {
+    return { ok: false, error: `${field} is required` };
+  }
+  const s = typeof value === 'string' ? value.trim() : '';
+  if (!s) return { ok: false, error: `${field} is required` };
+  if (!EMAIL_RE.test(s)) return { ok: false, error: `${field} must be a valid email address` };
+  return { ok: true, value: s };
+}
+
+export function parseNonEmptyString(
+  value: unknown,
+  field: string,
+  minLen = 1
+): { ok: true; value: string } | { ok: false; error: string } {
+  if (value === undefined || value === null) {
+    return { ok: false, error: `${field} is required` };
+  }
+  const s = typeof value === 'string' ? value.trim() : '';
+  if (s.length < minLen) {
+    return { ok: false, error: `${field} must be at least ${minLen} characters` };
+  }
+  return { ok: true, value: s };
+}
+
+export function parseOptionalTrimmedString(value: unknown): { ok: true; value?: string } | { ok: false; error: string } {
+  if (value === undefined || value === null || value === '') return { ok: true };
+  if (typeof value !== 'string') return { ok: false, error: 'Expected a string' };
+  const s = value.trim();
+  return { ok: true, value: s || undefined };
+}

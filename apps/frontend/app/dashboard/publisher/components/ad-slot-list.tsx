@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useRef } from 'react';
 import type { AdSlot } from '@/lib/types';
 import { AdSlotCard } from './ad-slot-card';
 import { AdSlotForm } from './ad-slot-form';
@@ -8,28 +8,39 @@ import {
   newSlotTriggerTv,
   publisherAdSlotListTv,
   publisherEmptyStateTv,
+  publisherFormTv,
   publisherToolbarTv,
 } from '../publisher-dashboard.styles';
+
+type DialogMode = null | 'create' | AdSlot;
 
 interface AdSlotListProps {
   adSlots: AdSlot[];
 }
 
 export function AdSlotList({ adSlots }: Readonly<AdSlotListProps>) {
-  const [showCreate, setShowCreate] = useState(false);
-  const [editingSlot, setEditingSlot] = useState<AdSlot | null>(null);
+  const [dialogMode, setDialogMode] = useState<DialogMode>(null);
+  const dialogRef = useRef<HTMLDialogElement>(null);
 
-  const handleCloseCreate = useCallback(() => setShowCreate(false), []);
-  const handleCloseEdit = useCallback(() => setEditingSlot(null), []);
-  const handleEdit = useCallback((adSlot: AdSlot) => {
-    setShowCreate(false);
-    setEditingSlot(adSlot);
+  const openDialog = useCallback((mode: DialogMode) => {
+    setDialogMode(mode);
+    requestAnimationFrame(() => dialogRef.current?.showModal());
   }, []);
+
+  const closeDialog = useCallback(() => {
+    dialogRef.current?.close();
+    setDialogMode(null);
+  }, []);
+
+  const handleEdit = useCallback((adSlot: AdSlot) => {
+    openDialog(adSlot);
+  }, [openDialog]);
 
   const list = publisherAdSlotListTv();
   const toolbar = publisherToolbarTv();
   const empty = publisherEmptyStateTv();
-  const newLink = newSlotTriggerTv;
+  const formStyles = publisherFormTv();
+  const editingSlot = dialogMode !== null && dialogMode !== 'create' ? dialogMode : undefined;
 
   return (
     <div className={list.root()}>
@@ -40,24 +51,14 @@ export function AdSlotList({ adSlots }: Readonly<AdSlotListProps>) {
         </p>
         <button
           type="button"
-          onClick={() => {
-            setEditingSlot(null);
-            setShowCreate((o) => !o);
-          }}
-          className={newLink({ open: showCreate })}
-          aria-expanded={showCreate}
+          onClick={() => openDialog('create')}
+          className={newSlotTriggerTv()}
         >
-          {showCreate ? 'Close' : '+ New Ad Slot'}
+          + New Ad Slot
         </button>
       </div>
 
-      {showCreate && (
-        <div className={list.formWrap()}>
-          <AdSlotForm onClose={handleCloseCreate} />
-        </div>
-      )}
-
-      {adSlots.length === 0 && !showCreate ? (
+      {adSlots.length === 0 ? (
         <div className={empty.root()}>
           <div className={empty.iconWrap()}>
             <span className={empty.icon()} aria-hidden>
@@ -69,24 +70,28 @@ export function AdSlotList({ adSlots }: Readonly<AdSlotListProps>) {
             Create your first slot to show up in the marketplace and start receiving sponsor
             interest.
           </p>
-          <button type="button" onClick={() => setShowCreate(true)} className={empty.cta()}>
+          <button type="button" onClick={() => openDialog('create')} className={empty.cta()}>
             Create your first slot
           </button>
         </div>
       ) : (
         <div className={list.cardGrid()}>
-          {adSlots.map((slot) =>
-            editingSlot?.id === slot.id ? (
-              <div key={slot.id} className={list.editFormRow()}>
-                <div className={list.formWrap()}>
-                  <AdSlotForm adSlot={slot} onClose={handleCloseEdit} />
-                </div>
-              </div>
-            ) : (
-              <AdSlotCard key={slot.id} adSlot={slot} onEdit={handleEdit} />
-            ),
-          )}
+          {adSlots.map((slot) => (
+            <AdSlotCard key={slot.id} adSlot={slot} onEdit={handleEdit} />
+          ))}
         </div>
+      )}
+
+      {/* Form dialog */}
+      {dialogMode !== null && (
+        <dialog ref={dialogRef} className={formStyles.dialog()}>
+          <AdSlotForm
+            key={editingSlot?.id ?? 'create'}
+            adSlot={editingSlot}
+            onClose={closeDialog}
+            dialogRef={dialogRef}
+          />
+        </dialog>
       )}
     </div>
   );

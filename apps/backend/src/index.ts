@@ -42,6 +42,8 @@ app.listen(PORT, () => {
   console.log('    GET    /api/ad-slots');
   console.log('    GET    /api/ad-slots/:id');
   console.log('    POST   /api/ad-slots');
+  console.log('  Quotes:');
+  console.log('    POST   /api/quotes/request');
   console.log('  Placements:');
   console.log('    GET    /api/placements');
   console.log('    POST   /api/placements');

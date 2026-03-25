@@ -39,9 +39,12 @@ export const campaignCardTv = tv({
 
 export const campaignFormTv = tv({
   slots: {
-    root: 'space-y-5 rounded-xl bg-(--color-background) p-6 shadow-[--shadow-card]',
-    header: 'border-b border-(--color-border) pb-4',
+    dialog: 'rounded-2xl border border-(--color-border) bg-(--color-background) p-0 shadow-[--shadow-lg]',
+    root: 'space-y-5 p-6',
+    header: 'flex items-center justify-between border-b border-(--color-border) pb-4',
     title: 'text-lg font-semibold text-(--color-foreground)',
+    closeButton:
+      'flex h-8 w-8 items-center justify-center rounded-lg text-(--color-muted) transition-colors hover:bg-(--color-surface) hover:text-(--color-foreground)',
     errorBanner: 'rounded-lg bg-red-50 p-3 text-sm text-red-700',
     label: 'mb-1.5 block text-sm font-medium text-(--color-foreground)',
     input:
