@@ -30,11 +30,14 @@ export function NewsletterForm() {
         body: JSON.stringify({ email: email.trim() }),
       });
 
-      const data = await res.json();
-
       if (!res.ok) {
+        let message = 'Something went wrong';
+        try {
+          const data = await res.json();
+          if (data.error) message = data.error;
+        } catch { /* ignore JSON parse failure — use default message */ }
         setStatus('error');
-        setErrorMessage(data.error || 'Something went wrong');
+        setErrorMessage(message);
         return;
       }
 
@@ -54,7 +57,7 @@ export function NewsletterForm() {
       </p>
 
       {status === 'success' ? (
-        <p className={s.success()}>Thanks for subscribing!</p>
+        <output className={s.success()}>Thanks for subscribing!</output>
       ) : (
         <form ref={formRef} onSubmit={handleSubmit} className={s.form()}>
           <input
@@ -72,7 +75,7 @@ export function NewsletterForm() {
         </form>
       )}
 
-      {status === 'error' && <p className={s.error()}>{errorMessage}</p>}
+      {status === 'error' && <p className={s.error()} role="alert">{errorMessage}</p>}
 
       <p className={s.hint()}>No spam, unsubscribe anytime.</p>
     </div>

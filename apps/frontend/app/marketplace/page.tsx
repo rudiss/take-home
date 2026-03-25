@@ -1,8 +1,10 @@
+import { getMarketplaceAdSlots } from '@/lib/api';
 import { AdSlotGrid } from './components/ad-slot-grid';
 import { marketplacePageTv } from './marketplace.styles';
 
-export default function MarketplacePage() {
+export default async function MarketplacePage() {
   const page = marketplacePageTv();
+  const initialData = await getMarketplaceAdSlots(1, 6);
 
   return (
     <div className={page.root()}>
@@ -16,7 +18,7 @@ export default function MarketplacePage() {
         </p>
       </header>
 
-      <AdSlotGrid />
+      <AdSlotGrid initialData={initialData} />
     </div>
   );
 }

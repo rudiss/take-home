@@ -7,7 +7,7 @@ import { adSlotImageUrl } from '@/lib/ad-slot-image';
 import { IconChevronRight } from './marketplace-icons';
 import { trackMarketplaceEvent } from '@/lib/conversion-events';
 import { formatSlotTypeLabel } from '@/lib/marketplace-ux';
-import { getMarketplaceAdSlots } from '@/lib/api';
+import { getMarketplaceAdSlots, type PaginatedResponse } from '@/lib/api';
 import type { AdSlot } from '@/lib/types';
 import {
   marketplaceCardAvailabilityTv,
@@ -52,44 +52,25 @@ function reducer(state: State, action: Action): State {
   }
 }
 
-const initialState: State = {
-  adSlots: [],
-  loading: true,
-  error: null,
-  page: 1,
-  totalPages: 1,
-  total: 0,
-};
+interface AdSlotGridProps {
+  initialData: PaginatedResponse<AdSlot>;
+}
 
-export function AdSlotGrid() {
-  const [state, dispatch] = useReducer(reducer, initialState);
+export function AdSlotGrid({ initialData }: Readonly<AdSlotGridProps>) {
+  const [state, dispatch] = useReducer(reducer, {
+    adSlots: initialData.data,
+    loading: false,
+    error: null,
+    page: initialData.pagination.page,
+    totalPages: initialData.pagination.totalPages,
+    total: initialData.pagination.total,
+  });
   const { adSlots, loading, error, page, totalPages, total } = state;
   const card = marketplaceListingCardTv();
   const pag = marketplacePaginationTv();
 
   useEffect(() => {
     trackMarketplaceEvent({ name: 'marketplace_view' });
-  }, []);
-
-  useEffect(() => {
-    let cancelled = false;
-    dispatch({ type: 'FETCH_START' });
-    getMarketplaceAdSlots(1, PAGE_SIZE)
-      .then((res) => {
-        if (!cancelled) {
-          dispatch({
-            type: 'FETCH_SUCCESS',
-            data: res.data,
-            page: res.pagination.page,
-            totalPages: res.pagination.totalPages,
-            total: res.pagination.total,
-          });
-        }
-      })
-      .catch(() => {
-        if (!cancelled) dispatch({ type: 'FETCH_ERROR', error: 'Failed to load ad slots' });
-      });
-    return () => { cancelled = true; };
   }, []);
 
   function goToPage(p: number) {
@@ -106,10 +87,6 @@ export function AdSlotGrid() {
         window.scrollTo({ top: 0, behavior: 'smooth' });
       })
       .catch(() => dispatch({ type: 'FETCH_ERROR', error: 'Failed to load ad slots' }));
-  }
-
-  if (loading && adSlots.length === 0) {
-    return <div className={marketplaceStateMessageTv({ kind: 'loading' })}>Loading marketplace...</div>;
   }
 
   if (error && adSlots.length === 0) {

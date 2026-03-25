@@ -171,7 +171,7 @@ export const adSlotDetailTv = tv({
     gateSection: 'space-y-3 border-t border-(--color-border) pt-4',
     gateTextMuted: 'text-sm text-(--color-muted)',
     gateText: 'text-sm text-(--color-foreground)',
-    successBox: 'rounded-lg border border-green-200 bg-green-50 p-4',
+    successBox: 'block rounded-lg border border-green-200 bg-green-50 p-4',
     successTitle: 'font-semibold text-green-800',
     successBody: 'mt-1 text-sm text-green-800',
     successNote: 'mt-3 text-xs text-green-800',

@@ -1,6 +1,6 @@
 'use client';
 
-import { useActionState, useEffect } from 'react';
+import { useActionState, useEffect, useRef } from 'react';
 import type { AdSlot } from '@/lib/types';
 import type { DashboardActionState } from '../../action-types';
 import { createAdSlotAction, updateAdSlotAction } from '../actions';
@@ -18,9 +18,13 @@ export function AdSlotForm({ adSlot, onClose }: Readonly<AdSlotFormProps>) {
   const action = adSlot ? updateAdSlotAction : createAdSlotAction;
   const [state, formAction] = useActionState(action, initialState);
   const form = publisherFormTv();
+  const handledSuccessRef = useRef(false);
 
   useEffect(() => {
-    if (state.success) onClose(true);
+    if (state.success && !handledSuccessRef.current) {
+      handledSuccessRef.current = true;
+      onClose(true);
+    }
   }, [state.success, onClose]);
 
   const handleClose = () => onClose();

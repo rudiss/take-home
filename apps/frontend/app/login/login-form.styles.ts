@@ -57,3 +57,39 @@ export const roleIcon = tv({
 export const submitButton = tv({
   base: 'flex w-full items-center justify-center gap-2 rounded-xl border border-(--color-primary-hover) bg-(--color-primary) px-4 py-3.5 text-sm font-semibold text-white shadow-md transition-all hover:bg-(--color-primary-hover) hover:shadow-lg focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--color-primary) active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50',
 });
+
+export const loginForm = tv({
+  base: 'mt-6 space-y-5',
+});
+
+export const loginLegend = tv({
+  base: 'mb-2 text-sm font-medium text-(--color-foreground)',
+});
+
+export const loginRadioGroup = tv({
+  base: 'grid gap-2',
+});
+
+export const roleOptionContent = tv({
+  base: 'min-w-0',
+});
+
+export const roleOptionLabel = tv({
+  base: 'text-sm font-semibold text-(--color-foreground)',
+});
+
+export const roleOptionDescription = tv({
+  base: 'text-xs text-(--color-muted)',
+});
+
+export const roleCheckIcon = tv({
+  base: 'ml-auto h-5 w-5 shrink-0 text-(--color-primary)',
+});
+
+export const credentialsHint = tv({
+  base: 'text-center text-xs text-(--color-muted)',
+});
+
+export const credentialsEmail = tv({
+  base: 'font-medium',
+});

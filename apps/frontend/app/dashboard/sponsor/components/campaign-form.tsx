@@ -1,6 +1,6 @@
 'use client';
 
-import { useActionState, useEffect } from 'react';
+import { useActionState, useEffect, useRef } from 'react';
 import type { Campaign } from '@/lib/types';
 import type { DashboardActionState } from '../../action-types';
 import { createCampaignAction, updateCampaignAction } from '../actions';
@@ -22,9 +22,13 @@ export function CampaignForm({ campaign, onClose }: Readonly<CampaignFormProps>)
   const action = campaign ? updateCampaignAction : createCampaignAction;
   const [state, formAction] = useActionState(action, initialState);
   const form = campaignFormTv();
+  const handledSuccessRef = useRef(false);
 
   useEffect(() => {
-    if (state.success) onClose(true);
+    if (state.success && !handledSuccessRef.current) {
+      handledSuccessRef.current = true;
+      onClose(true);
+    }
   }, [state.success, onClose]);
 
   const handleClose = () => onClose();

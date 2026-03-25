@@ -45,3 +45,119 @@ export const sectionHeading = tv({
 export const stepBadge = tv({
   base: 'mb-4 flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-(--color-primary) text-sm font-bold text-white',
 });
+
+/* ------------------------------------------------------------------ */
+/*  Landing page sections                                             */
+/* ------------------------------------------------------------------ */
+
+export const landingRoot = tv({
+  base: 'pb-16 pt-2 sm:pb-24 sm:pt-4',
+});
+
+export const heroSection = tv({
+  base: 'relative overflow-hidden rounded-3xl border border-(--color-border) bg-linear-to-br from-indigo-50/90 via-(--color-background) to-emerald-50/80 px-6 py-14 shadow-[--shadow-lg] sm:px-10 sm:py-16 lg:px-14 lg:py-20 dark:from-indigo-950/40 dark:via-(--color-background) dark:to-emerald-950/30',
+});
+
+export const heroGrid = tv({
+  base: 'mx-auto grid max-w-6xl gap-12 lg:grid-cols-2 lg:items-center lg:gap-16',
+});
+
+export const heroHeader = tv({
+  base: 'text-center lg:text-left',
+});
+
+export const heroEyebrow = tv({
+  base: 'mb-4 text-sm font-semibold uppercase tracking-wider text-(--color-primary)',
+});
+
+export const heroTitle = tv({
+  base: 'text-balance text-4xl font-bold tracking-tight text-(--color-foreground) sm:text-5xl lg:text-[3.25rem] lg:leading-[1.1]',
+});
+
+export const heroSubtitle = tv({
+  base: 'mx-auto mt-5 max-w-xl text-pretty text-lg text-(--color-muted) lg:mx-0',
+});
+
+export const heroNav = tv({
+  base: 'mt-8 flex flex-col items-center gap-3 sm:flex-row sm:justify-center lg:justify-start',
+});
+
+export const heroNote = tv({
+  base: 'mt-6 text-sm text-(--color-muted)',
+});
+
+export const heroVisualWrap = tv({
+  base: 'relative mx-auto w-full max-w-md lg:max-w-none',
+});
+
+export const featuresSection = tv({
+  base: 'mx-auto mt-20 max-w-6xl sm:mt-28',
+});
+
+export const featuresSectionHeader = tv({
+  base: 'mx-auto max-w-2xl text-center',
+});
+
+export const featuresSectionSubtitle = tv({
+  base: 'mt-4 text-lg text-(--color-muted)',
+});
+
+export const featuresGrid = tv({
+  base: 'mt-14 grid gap-8 sm:grid-cols-2 lg:grid-cols-3',
+});
+
+export const featureTitle = tv({
+  base: 'text-lg font-semibold text-(--color-foreground)',
+});
+
+export const featureDescription = tv({
+  base: 'mt-2 text-(--color-muted)',
+});
+
+export const howItWorksSection = tv({
+  base: 'mx-auto mt-20 max-w-6xl rounded-3xl border border-(--color-border) bg-(--color-surface) px-6 py-14 sm:mt-28 sm:px-10 sm:py-16',
+});
+
+export const howItWorksSectionSubtitle = tv({
+  base: 'mt-4 text-lg text-(--color-muted)',
+});
+
+export const stepsGrid = tv({
+  base: 'mx-auto mt-12 grid max-w-4xl gap-10 md:grid-cols-3 md:gap-8',
+});
+
+export const stepItem = tv({
+  base: 'relative flex flex-col items-center text-center md:items-start md:text-left',
+});
+
+export const stepTitle = tv({
+  base: 'text-lg font-semibold text-(--color-foreground)',
+});
+
+export const stepDescription = tv({
+  base: 'mt-2 text-sm text-(--color-muted)',
+});
+
+export const ctaSection = tv({
+  base: 'mx-auto mt-20 max-w-6xl sm:mt-28',
+});
+
+export const ctaCard = tv({
+  base: 'overflow-hidden rounded-3xl bg-linear-to-br from-(--color-primary) to-indigo-700 px-8 py-14 text-center text-white shadow-[--shadow-lg] sm:px-12 sm:py-16',
+});
+
+export const ctaTitle = tv({
+  base: 'text-3xl font-bold tracking-tight sm:text-4xl',
+});
+
+export const ctaSubtitle = tv({
+  base: 'mx-auto mt-4 max-w-xl text-pretty text-lg text-indigo-100',
+});
+
+export const ctaNav = tv({
+  base: 'mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row',
+});
+
+export const ctaNote = tv({
+  base: 'mt-10 text-sm text-indigo-200',
+});

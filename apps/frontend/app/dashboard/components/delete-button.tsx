@@ -36,9 +36,11 @@ export function DeleteButton({
   const descId = useId();
   const [state, formAction, pending] = useActionState(action, {});
   const dlg = deleteDialogTv();
+  const handledSuccessRef = useRef(false);
 
   useEffect(() => {
-    if (state.success) {
+    if (state.success && !handledSuccessRef.current) {
+      handledSuccessRef.current = true;
       closeDialogAnimated(dialogRef, () => onSuccess?.());
     }
   }, [state.success, onSuccess]);

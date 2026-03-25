@@ -64,7 +64,7 @@ export function ToastContainer() {
             exit={{ opacity: 0, x: 80, scale: 0.95 }}
             transition={{ type: 'spring', stiffness: 400, damping: 30 }}
             className={toastItemTv({ type: toast.type })}
-            role="status"
+            role={toast.type === 'error' ? 'alert' : 'status'}
           >
             <ToastIcon type={toast.type} />
             <p className={toastMessageTv()}>{toast.message}</p>

@@ -215,13 +215,16 @@ export function QuoteRequestDialog({
                 <input
                   id="qr-company"
                   name="companyName"
+                  required
                   autoComplete="organization"
                   value={companyName}
                   onChange={(e) => setCompanyName(e.target.value)}
                   className={dlg.input()}
+                  aria-invalid={!!fieldErrors.companyName}
+                  aria-describedby={fieldErrors.companyName ? 'qr-company-error' : undefined}
                 />
                 {fieldErrors.companyName && (
-                  <p className={dlg.fieldError()}>{fieldErrors.companyName}</p>
+                  <p id="qr-company-error" className={dlg.fieldError()}>{fieldErrors.companyName}</p>
                 )}
               </div>
 
@@ -233,12 +236,15 @@ export function QuoteRequestDialog({
                   id="qr-email"
                   name="email"
                   type="email"
+                  required
                   autoComplete="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   className={dlg.input()}
+                  aria-invalid={!!fieldErrors.email}
+                  aria-describedby={fieldErrors.email ? 'qr-email-error' : undefined}
                 />
-                {fieldErrors.email && <p className={dlg.fieldError()}>{fieldErrors.email}</p>}
+                {fieldErrors.email && <p id="qr-email-error" className={dlg.fieldError()}>{fieldErrors.email}</p>}
               </div>
 
               <div className={dlg.field()}>
@@ -301,14 +307,17 @@ export function QuoteRequestDialog({
                 <textarea
                   id="qr-campaign"
                   name="campaignDetails"
+                  required
                   rows={4}
                   value={campaignDetails}
                   onChange={(e) => setCampaignDetails(e.target.value)}
                   placeholder="Audience, channels, KPIs, run dates, creative needs…"
                   className={dlg.textarea()}
+                  aria-invalid={!!fieldErrors.campaignDetails}
+                  aria-describedby={fieldErrors.campaignDetails ? 'qr-campaign-error' : undefined}
                 />
                 {fieldErrors.campaignDetails && (
-                  <p className={dlg.fieldError()}>{fieldErrors.campaignDetails}</p>
+                  <p id="qr-campaign-error" className={dlg.fieldError()}>{fieldErrors.campaignDetails}</p>
                 )}
               </div>
 

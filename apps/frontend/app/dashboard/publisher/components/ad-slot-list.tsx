@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useCallback, useRef, useMemo } from 'react';
+import { useState, useCallback, useEffect, useRef, useMemo } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import type { AdSlot } from '@/lib/types';
 import { useToast } from '@/app/components/toast';
@@ -79,8 +79,13 @@ export function AdSlotList({ adSlots }: Readonly<AdSlotListProps>) {
 
   const openDialog = useCallback((mode: DialogMode) => {
     setDialogMode(mode);
-    requestAnimationFrame(() => dialogRef.current?.showModal());
   }, []);
+
+  useEffect(() => {
+    if (dialogMode !== null) {
+      dialogRef.current?.showModal();
+    }
+  }, [dialogMode]);
 
   const closeDialog = useCallback(
     (succeeded?: boolean) => {

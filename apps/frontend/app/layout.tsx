@@ -6,6 +6,7 @@ import { Nav } from './components/nav';
 import { ThemeProvider } from './components/theme-provider';
 import { ToastProvider, ToastContainer } from './components/toast';
 import { getSiteUrl } from '@/lib/site-url';
+import { layoutBody, layoutMain, skipLink } from './layout.styles';
 
 const inter = Inter({ subsets: ['latin'], display: 'swap' });
 
@@ -37,11 +38,14 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: Readonly<{ children: ReactNode }>) {
   return (
     <html lang="en" className={inter.className} suppressHydrationWarning>
-      <body className="min-h-screen antialiased" suppressHydrationWarning>
+      <body className={layoutBody()} suppressHydrationWarning>
         <ThemeProvider>
           <ToastProvider>
+            <a href="#main-content" className={skipLink()}>
+              Skip to content
+            </a>
             <Nav />
-            <main className="mx-auto max-w-6xl px-4 py-8">{children}</main>
+            <main id="main-content" className={layoutMain()}>{children}</main>
             <ToastContainer />
           </ToastProvider>
         </ThemeProvider>
