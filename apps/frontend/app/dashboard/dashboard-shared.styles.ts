@@ -1,7 +1,7 @@
 import { tv } from 'tailwind-variants';
 
 export const deleteButtonTriggerTv = tv({
-  base: 'text-sm transition-colors focus:outline-none',
+  base: 'text-sm transition-[colors,opacity] duration-150 ease-out focus:outline-none active:opacity-80',
   variants: {
     tone: {
       default: 'text-red-600 hover:text-red-800',
@@ -20,15 +20,15 @@ export const deleteDialogTv = tv({
     description: 'mt-2 text-sm text-(--color-muted)',
     form: 'mt-6 flex items-center justify-end gap-3',
     cancel:
-      'rounded-lg border border-(--color-border) px-4 py-2 text-sm font-medium transition-colors hover:bg-(--color-surface)',
+      'rounded-lg border border-(--color-border) px-4 py-2 text-sm font-medium transition-[transform,colors] duration-200 ease-out hover:bg-(--color-surface) active:scale-[0.99]',
     submit:
-      'rounded-lg bg-red-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-red-700 disabled:opacity-50',
+      'rounded-lg bg-red-600 px-4 py-2 text-sm font-medium text-white transition-[transform,colors] duration-200 ease-out hover:bg-red-700 active:scale-[0.99] disabled:opacity-50',
     error: 'mt-2 text-xs text-red-600',
   },
 });
 
 export const submitButtonTv = tv({
-  base: 'rounded-lg px-5 py-2.5 text-sm transition-colors disabled:opacity-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2',
+  base: 'rounded-lg px-5 py-2.5 text-sm transition-[transform,colors] duration-200 ease-out disabled:opacity-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 active:scale-[0.99]',
   variants: {
     variant: {
       primary:

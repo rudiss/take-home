@@ -1,6 +1,6 @@
 'use client';
 
-import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
+import { createContext, useCallback, useContext, useEffect, useMemo, useSyncExternalStore } from 'react';
 
 type Theme = 'light' | 'dark';
 
@@ -16,22 +16,35 @@ const ThemeContext = createContext<ThemeContextValue>({
 
 const STORAGE_KEY = 'anvara-theme';
 
-function getStoredTheme(): Theme | null {
-  if (typeof window === 'undefined') return null;
+function getStoredTheme(): Theme {
+  if (typeof window === 'undefined') return 'light';
   const stored = localStorage.getItem(STORAGE_KEY);
   if (stored === 'light' || stored === 'dark') return stored;
-  return null;
+  return 'light';
+}
+
+// Listeners for useSyncExternalStore
+let listeners: Array<() => void> = [];
+function subscribe(cb: () => void) {
+  listeners = [...listeners, cb];
+  return () => {
+    listeners = listeners.filter((l) => l !== cb);
+  };
+}
+function emitChange() {
+  for (const l of listeners) l();
+}
+function getSnapshot(): Theme {
+  return getStoredTheme();
+}
+function getServerSnapshot(): Theme {
+  return 'light';
 }
 
 export function ThemeProvider({ children }: Readonly<{ children: React.ReactNode }>) {
-  const [theme, setTheme] = useState<Theme>('light');
+  const theme = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
 
-  // On mount, read from localStorage (default: light)
-  useEffect(() => {
-    setTheme(getStoredTheme() ?? 'light');
-  }, []);
-
-  // Sync .dark class on <html> and persist
+  // Sync .dark class on <html> whenever theme changes
   useEffect(() => {
     const root = document.documentElement;
     if (theme === 'dark') {
@@ -39,11 +52,12 @@ export function ThemeProvider({ children }: Readonly<{ children: React.ReactNode
     } else {
       root.classList.remove('dark');
     }
-    localStorage.setItem(STORAGE_KEY, theme);
   }, [theme]);
 
   const toggle = useCallback(() => {
-    setTheme((prev) => (prev === 'light' ? 'dark' : 'light'));
+    const next = getStoredTheme() === 'light' ? 'dark' : 'light';
+    localStorage.setItem(STORAGE_KEY, next);
+    emitChange();
   }, []);
 
   const value = useMemo(() => ({ theme, toggle }), [theme, toggle]);

@@ -62,9 +62,9 @@ export const marketplaceStateMessageTv = tv({
 
 export const marketplaceListingCardTv = tv({
   slots: {
-    link: 'group flex flex-col overflow-hidden rounded-xl border border-(--color-border) bg-(--color-background) shadow-[--shadow-card] transition-shadow hover:shadow-[--shadow-card-hover]',
+    link: 'group flex flex-col overflow-hidden rounded-xl border border-(--color-border) bg-(--color-background) shadow-[--shadow-card] transition-[transform,box-shadow] duration-300 ease-out hover:-translate-y-0.5 hover:shadow-[--shadow-card-hover]',
     imageWrap: 'relative aspect-16/10 w-full overflow-hidden bg-(--color-surface)',
-    image: 'object-cover transition-transform duration-300 group-hover:scale-[1.03]',
+    image: 'object-cover transition-transform duration-300 ease-out group-hover:scale-[1.03]',
     body: 'flex flex-1 flex-col p-4',
     cardTitle:
       'text-lg font-bold leading-snug text-(--color-foreground) group-hover:text-(--color-primary)',
@@ -75,6 +75,32 @@ export const marketplaceListingCardTv = tv({
     price: 'text-xl font-bold text-(--color-primary)',
     priceSuffix: 'text-sm font-semibold text-(--color-muted)',
     cta: 'inline-flex items-center gap-0.5 text-sm font-semibold text-(--color-primary)',
+  },
+});
+
+export const marketplacePaginationTv = tv({
+  slots: {
+    root: 'mt-8 flex flex-col items-center gap-3 sm:flex-row sm:justify-between',
+    info: 'text-sm text-(--color-muted)',
+    buttons: 'flex items-center gap-1',
+    button:
+      'rounded-lg border border-(--color-border) px-3 py-1.5 text-sm font-medium text-(--color-foreground) transition-colors hover:bg-(--color-surface) disabled:opacity-40 disabled:pointer-events-none',
+    pageNumber: '',
+  },
+  variants: {
+    active: {
+      true: {
+        pageNumber:
+          'rounded-lg bg-(--color-primary) px-3 py-1.5 text-sm font-semibold text-white',
+      },
+      false: {
+        pageNumber:
+          'rounded-lg px-3 py-1.5 text-sm font-medium text-(--color-foreground) transition-colors hover:bg-(--color-surface)',
+      },
+    },
+  },
+  defaultVariants: {
+    active: false,
   },
 });
 
@@ -140,7 +166,7 @@ export const adSlotDetailTv = tv({
       'w-full rounded-lg border border-(--color-border) bg-(--color-background) px-3 py-2 text-(--color-foreground) placeholder:text-(--color-muted) focus:border-(--color-primary) focus:outline-none focus:ring-2 focus:ring-(--color-primary)/20',
     bookingError: 'text-sm text-red-600',
     primaryButton:
-      'flex w-full items-center justify-center rounded-xl bg-(--color-primary) px-4 py-3.5 text-base font-bold text-white shadow-md transition-colors hover:bg-(--color-primary-hover) disabled:opacity-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--color-primary)',
+      'flex w-full items-center justify-center rounded-xl bg-(--color-primary) px-4 py-3.5 text-base font-bold text-white shadow-md transition-[transform,colors] duration-200 ease-out hover:bg-(--color-primary-hover) active:scale-[0.99] disabled:opacity-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--color-primary)',
     sidebarHint: 'text-center text-xs text-(--color-muted)',
     gateSection: 'space-y-3 border-t border-(--color-border) pt-4',
     gateTextMuted: 'text-sm text-(--color-muted)',
@@ -196,17 +222,17 @@ export const quoteRequestDialogTv = tv({
     apiError: 'mb-4 rounded-lg border border-red-200 bg-red-50 p-3 text-sm text-red-700',
     footer: 'flex flex-wrap justify-end gap-2 border-t border-(--color-border) px-5 py-4',
     trigger:
-      'w-full rounded-lg border border-(--color-border) bg-transparent px-4 py-2.5 text-sm font-semibold text-(--color-foreground) transition-colors hover:bg-(--color-surface) focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--color-primary)',
+      'w-full rounded-lg border border-(--color-border) bg-transparent px-4 py-2.5 text-sm font-semibold text-(--color-foreground) transition-[transform,colors] duration-200 ease-out hover:bg-(--color-surface) active:scale-[0.99] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--color-primary)',
     cancelButton:
-      'rounded-lg border border-(--color-border) px-4 py-2 text-sm font-medium text-(--color-foreground) transition-colors hover:bg-(--color-surface)',
+      'rounded-lg border border-(--color-border) px-4 py-2 text-sm font-medium text-(--color-foreground) transition-[transform,colors] duration-200 ease-out hover:bg-(--color-surface) active:scale-[0.99]',
     submitButton:
-      'rounded-lg bg-(--color-primary) px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-(--color-primary-hover) disabled:opacity-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--color-primary)',
+      'rounded-lg bg-(--color-primary) px-4 py-2 text-sm font-semibold text-white transition-[transform,colors] duration-200 ease-out hover:bg-(--color-primary-hover) active:scale-[0.99] disabled:opacity-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--color-primary)',
     successTitle: 'text-lg font-semibold text-(--color-foreground)',
     successBody: 'mt-2 text-sm text-(--color-muted)',
     quoteId: 'mt-3 rounded-md bg-(--color-surface) px-3 py-2 font-mono text-xs text-(--color-foreground)',
     nextSteps: 'mt-4 space-y-2 text-sm text-(--color-muted)',
     nextStepItem: 'flex gap-2',
     closeSuccessButton:
-      'mt-6 w-full rounded-lg bg-(--color-primary) px-4 py-2.5 text-sm font-semibold text-white hover:bg-(--color-primary-hover) focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--color-primary)',
+      'mt-6 w-full rounded-lg bg-(--color-primary) px-4 py-2.5 text-sm font-semibold text-white transition-[transform,colors] duration-200 ease-out hover:bg-(--color-primary-hover) active:scale-[0.99] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--color-primary)',
   },
 });

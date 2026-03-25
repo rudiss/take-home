@@ -15,7 +15,69 @@ import {
 
 const router: IRouter = Router();
 
-// GET /api/ad-slots - List ad slots
+// GET /api/ad-slots/marketplace - Public: browse available ad slots (no auth required)
+// Supports pagination via ?page=1&limit=6 query params
+router.get('/marketplace', async (req, res: Response) => {
+  try {
+    const page = Math.max(1, parseInt(String(req.query.page ?? ''), 10) || 1);
+    const limit = Math.min(50, Math.max(1, parseInt(String(req.query.limit ?? ''), 10) || 6));
+    const skip = (page - 1) * limit;
+
+    const [adSlots, total] = await Promise.all([
+      prisma.adSlot.findMany({
+        where: { isAvailable: true },
+        include: {
+          publisher: { select: { id: true, name: true, category: true, monthlyViews: true } },
+          _count: { select: { placements: true } },
+        },
+        orderBy: { basePrice: 'desc' },
+        skip,
+        take: limit,
+      }),
+      prisma.adSlot.count({ where: { isAvailable: true } }),
+    ]);
+
+    res.json({
+      data: adSlots,
+      pagination: {
+        page,
+        limit,
+        total,
+        totalPages: Math.ceil(total / limit),
+      },
+    });
+  } catch (error) {
+    console.error('Error fetching marketplace ad slots:', error);
+    res.status(500).json({ error: 'Failed to fetch ad slots' });
+  }
+});
+
+// GET /api/ad-slots/marketplace/:id - Public: view single ad slot details (no auth required)
+router.get('/marketplace/:id', async (req, res: Response) => {
+  try {
+    const id = getParam(req.params.id);
+    const adSlot = await prisma.adSlot.findUnique({
+      where: { id },
+      include: {
+        publisher: {
+          select: { id: true, name: true, category: true, website: true, monthlyViews: true },
+        },
+      },
+    });
+
+    if (!adSlot) {
+      res.status(404).json({ error: 'Ad slot not found' });
+      return;
+    }
+
+    res.json(adSlot);
+  } catch (error) {
+    console.error('Error fetching marketplace ad slot:', error);
+    res.status(500).json({ error: 'Failed to fetch ad slot' });
+  }
+});
+
+// GET /api/ad-slots - List ad slots (authenticated, owner-scoped)
 // Publishers see only their own slots; sponsors see all available slots (marketplace)
 router.get('/', authMiddleware, async (req: AuthRequest, res: Response) => {
   try {

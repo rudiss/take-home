@@ -1,6 +1,6 @@
 'use client';
 
-import { useActionState, useEffect, type RefObject } from 'react';
+import { useActionState, useEffect } from 'react';
 import type { Campaign } from '@/lib/types';
 import type { DashboardActionState } from '../../action-types';
 import { createCampaignAction, updateCampaignAction } from '../actions';
@@ -9,8 +9,7 @@ import { campaignFormTv } from '../sponsor-dashboard.styles';
 
 interface CampaignFormProps {
   campaign?: Campaign;
-  onClose: () => void;
-  dialogRef?: RefObject<HTMLDialogElement | null>;
+  onClose: (succeeded?: boolean) => void;
 }
 
 function toDateInputValue(dateStr: string): string {
@@ -19,22 +18,16 @@ function toDateInputValue(dateStr: string): string {
 
 const initialState: DashboardActionState = {};
 
-export function CampaignForm({ campaign, onClose, dialogRef }: Readonly<CampaignFormProps>) {
+export function CampaignForm({ campaign, onClose }: Readonly<CampaignFormProps>) {
   const action = campaign ? updateCampaignAction : createCampaignAction;
   const [state, formAction] = useActionState(action, initialState);
   const form = campaignFormTv();
 
   useEffect(() => {
-    if (state.success) {
-      dialogRef?.current?.close();
-      onClose();
-    }
-  }, [state.success, onClose, dialogRef]);
+    if (state.success) onClose(true);
+  }, [state.success, onClose]);
 
-  const handleClose = () => {
-    dialogRef?.current?.close();
-    onClose();
-  };
+  const handleClose = () => onClose();
 
   return (
     <form action={formAction} className={form.root()}>

@@ -14,9 +14,10 @@ import {
 interface AdSlotCardProps {
   adSlot: AdSlot;
   onEdit: (adSlot: AdSlot) => void;
+  onDeleted?: () => void;
 }
 
-export function AdSlotCard({ adSlot, onEdit }: Readonly<AdSlotCardProps>) {
+export function AdSlotCard({ adSlot, onEdit, onDeleted }: Readonly<AdSlotCardProps>) {
   const card = adSlotCardTv();
   const available = adSlot.isAvailable;
 
@@ -58,6 +59,7 @@ export function AdSlotCard({ adSlot, onEdit }: Readonly<AdSlotCardProps>) {
             id={adSlot.id}
             itemLabel={adSlot.name}
             triggerTone="dark"
+            onSuccess={onDeleted}
           />
         </div>
       </div>

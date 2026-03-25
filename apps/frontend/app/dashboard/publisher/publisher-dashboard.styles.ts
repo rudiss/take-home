@@ -26,11 +26,15 @@ export const publisherToolbarTv = tv({
   slots: {
     bar: 'flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between',
     hint: 'text-xs text-slate-500',
+    filterGroup: 'flex flex-wrap items-center gap-2',
+    filterSelect:
+      'rounded-lg border border-slate-600 bg-slate-950/80 px-3 py-2 text-sm text-white shadow-inner focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-500/30',
+    activeFilterCount: 'text-xs text-slate-500',
   },
 });
 
 export const newSlotTriggerTv = tv({
-  base: 'inline-flex items-center gap-1.5 text-sm font-semibold text-white underline decoration-slate-500 underline-offset-4 transition-colors hover:text-sky-300 hover:decoration-sky-400 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-500 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950',
+  base: 'inline-flex items-center gap-1.5 text-sm font-semibold text-white underline decoration-slate-500 underline-offset-4 transition-[colors,opacity,transform] duration-200 ease-out hover:text-sky-300 hover:decoration-sky-400 active:opacity-80 active:translate-y-px focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-500 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950',
   variants: {
     open: {
       true: 'text-slate-300 decoration-slate-600',
@@ -42,7 +46,7 @@ export const newSlotTriggerTv = tv({
 
 export const adSlotCardTv = tv({
   slots: {
-    root: 'flex h-full flex-col space-y-4 py-2',
+    root: 'flex h-full flex-col space-y-4 py-2 transition-transform duration-200 ease-out md:hover:-translate-y-0.5',
     topRow: 'flex items-start justify-between gap-3',
     title: 'min-w-0 flex-1 text-base font-bold leading-snug text-white sm:text-lg',
     description: 'min-h-14 text-sm leading-relaxed text-slate-400 line-clamp-3 sm:line-clamp-4',
@@ -55,7 +59,7 @@ export const adSlotCardTv = tv({
     actionSection: 'mt-auto border-t border-slate-800 pt-4',
     actionsRow: 'flex flex-wrap items-center gap-6',
     editButton:
-      'text-sm font-medium text-white transition-colors hover:text-slate-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-500 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950',
+      'text-sm font-medium text-white transition-[transform,colors] duration-200 ease-out hover:text-slate-200 active:scale-[0.99] focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-500 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950',
   },
 });
 
@@ -80,7 +84,7 @@ export const publisherEmptyStateTv = tv({
     icon: 'text-2xl font-light text-sky-400',
     title: 'text-lg font-semibold text-white',
     body: 'mt-2 max-w-sm mx-auto text-sm text-slate-400',
-    cta: 'mt-6 inline-flex items-center justify-center rounded-lg bg-sky-500 px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-sky-400',
+    cta: 'mt-6 inline-flex items-center justify-center rounded-lg bg-sky-500 px-5 py-2.5 text-sm font-semibold text-white transition-[transform,colors] duration-200 ease-out hover:bg-sky-400 active:scale-[0.99]',
   },
 });
 
@@ -91,7 +95,7 @@ export const publisherFormTv = tv({
     header: 'flex items-center justify-between border-b border-slate-700 pb-4',
     title: 'text-lg font-semibold text-white',
     closeButton:
-      'flex h-8 w-8 items-center justify-center rounded-lg text-slate-400 transition-colors hover:bg-slate-800 hover:text-white',
+      'flex h-8 w-8 items-center justify-center rounded-lg text-slate-400 transition-[transform,colors] duration-200 ease-out hover:bg-slate-800 hover:text-white active:scale-95',
     subtitle: 'mt-1 text-sm text-slate-500',
     fieldGrid: 'grid grid-cols-1 gap-4 sm:grid-cols-2',
     errorBanner: 'rounded-lg border border-red-500/30 bg-red-950/50 p-3 text-sm text-red-200',
@@ -101,7 +105,7 @@ export const publisherFormTv = tv({
       'w-full rounded-lg border border-slate-600 bg-slate-950/80 px-3 py-2.5 text-sm text-white shadow-inner placeholder:text-slate-500 focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-500/30',
     footer: 'flex flex-wrap gap-3 border-t border-slate-700 pt-4',
     cancelButton:
-      'rounded-lg border border-slate-600 px-4 py-2.5 text-sm font-medium text-slate-200 transition-colors hover:border-slate-500 hover:bg-slate-800',
+      'rounded-lg border border-slate-600 px-4 py-2.5 text-sm font-medium text-slate-200 transition-[transform,colors] duration-200 ease-out hover:border-slate-500 hover:bg-slate-800 active:scale-[0.99]',
     fieldError: 'mt-1.5 text-xs text-red-400',
   },
 });
@@ -186,6 +190,6 @@ export const publisherErrorTv = tv({
     title: 'mb-2 text-lg font-semibold text-white',
     body: 'mb-6 text-sm text-slate-400',
     retry:
-      'rounded-lg bg-sky-500 px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-sky-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-400',
+      'rounded-lg bg-sky-500 px-5 py-2.5 text-sm font-semibold text-white transition-[transform,colors] duration-200 ease-out hover:bg-sky-400 active:scale-[0.99] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-400',
   },
 });

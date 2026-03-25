@@ -9,7 +9,6 @@ export function getParam(param: unknown): string {
 }
 
 // Helper to format currency values
-// FIXME: 'amount' has implicit 'any' type - should be 'number'
 export function formatCurrency(amount: number, currency = 'USD') {
   const formatter = new Intl.NumberFormat('en-US', {
     style: 'currency',
@@ -25,7 +24,6 @@ export function calculatePercentChange(oldValue: number, newValue: number) {
 }
 
 // Parse pagination params from query
-// FIXME: 'query' has implicit 'any' type - should be typed
 export function parsePagination(query: Record<string, unknown>) {
   const page = parseInt(String(query.page ?? ''), 10) || 1;
   const limit = parseInt(String(query.limit ?? ''), 10) || 10;
@@ -35,14 +33,12 @@ export function parsePagination(query: Record<string, unknown>) {
 }
 
 // Validate email format
-// FIXME: 'email' should be typed as 'string' not 'any'
 export function isValidEmail(email: string): boolean {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   return emailRegex.test(email);
 }
 
 // Helper to build filter object from query params
-// FIXME: Multiple 'any' types that should be properly typed
 export const buildFilters = (query: Record<string, unknown>, allowedFields: string[]) => {
   const filters: Record<string, unknown> = {};
 
@@ -53,12 +49,6 @@ export const buildFilters = (query: Record<string, unknown>, allowedFields: stri
   }
 
   return filters;
-};
-
-// Unused export that should be removed or marked deprecated
-export const DEPRECATED_CONFIG = {
-  apiVersion: 'v1',
-  timeout: 5000,
 };
 
 // BUG: This function has a logic error - it doesn't handle negative numbers correctly

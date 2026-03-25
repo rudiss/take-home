@@ -33,6 +33,20 @@ export const getAdSlots = (options?: RequestInit) =>
   api<AdSlot[]>('/api/ad-slots', { cache: 'no-store', ...options });
 export const getAdSlot = (id: string, options?: RequestInit) =>
   api<AdSlot>(`/api/ad-slots/${id}`, options);
+
+// Marketplace (public, no auth required)
+export interface PaginatedResponse<T> {
+  data: T[];
+  pagination: { page: number; limit: number; total: number; totalPages: number };
+}
+
+export const getMarketplaceAdSlots = (page = 1, limit = 6, options?: RequestInit) =>
+  api<PaginatedResponse<AdSlot>>(`/api/ad-slots/marketplace?page=${page}&limit=${limit}`, {
+    cache: 'no-store',
+    ...options,
+  });
+export const getMarketplaceAdSlot = (id: string, options?: RequestInit) =>
+  api<AdSlot>(`/api/ad-slots/marketplace/${id}`, options);
 export const createAdSlot = (data: Record<string, unknown>, options?: RequestInit) =>
   api<AdSlot>('/api/ad-slots', { method: 'POST', body: JSON.stringify(data), ...options });
 export const updateAdSlot = (id: string, data: Record<string, unknown>, options?: RequestInit) =>

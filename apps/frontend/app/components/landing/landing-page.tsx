@@ -15,6 +15,7 @@ import {
   sectionHeading,
   stepBadge,
 } from './landing-page.styles';
+import { NewsletterForm } from '@/app/components/newsletter';
 
 /* ------------------------------------------------------------------ */
 /*  Data                                                              */
@@ -196,6 +197,9 @@ export function LandingPage() {
           ))}
         </ol>
       </section>
+
+      {/* Newsletter */}
+      <NewsletterForm />
 
       {/* CTA */}
       <section className="mx-auto mt-20 max-w-6xl sm:mt-28" aria-labelledby="cta-heading">

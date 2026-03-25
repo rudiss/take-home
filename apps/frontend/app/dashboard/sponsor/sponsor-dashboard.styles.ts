@@ -20,7 +20,7 @@ export const campaignStatusBadgeTv = tv({
 
 export const campaignCardTv = tv({
   slots: {
-    root: 'group rounded-xl bg-(--color-background) p-5 shadow-[--shadow-card] transition-shadow hover:shadow-[--shadow-card-hover]',
+    root: 'group rounded-xl bg-(--color-background) p-5 shadow-[--shadow-card] transition-[transform,box-shadow] duration-300 ease-out hover:-translate-y-0.5 hover:shadow-[--shadow-card-hover]',
     topRow: 'mb-3 flex items-start justify-between gap-2',
     title: 'text-base font-semibold leading-tight text-(--color-foreground)',
     description: 'mb-4 text-sm leading-relaxed text-(--color-muted) line-clamp-2',
@@ -33,7 +33,7 @@ export const campaignCardTv = tv({
     dateLine: 'mb-4 text-xs text-(--color-muted)',
     actions: 'flex items-center gap-3 border-t border-(--color-border) pt-3',
     editButton:
-      'text-sm font-medium text-(--color-primary) transition-colors hover:text-(--color-primary-hover) focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--color-primary)',
+      'text-sm font-medium text-(--color-primary) transition-[transform,colors] duration-200 ease-out hover:text-(--color-primary-hover) active:scale-[0.99] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--color-primary)',
   },
 });
 
@@ -44,7 +44,7 @@ export const campaignFormTv = tv({
     header: 'flex items-center justify-between border-b border-(--color-border) pb-4',
     title: 'text-lg font-semibold text-(--color-foreground)',
     closeButton:
-      'flex h-8 w-8 items-center justify-center rounded-lg text-(--color-muted) transition-colors hover:bg-(--color-surface) hover:text-(--color-foreground)',
+      'flex h-8 w-8 items-center justify-center rounded-lg text-(--color-muted) transition-[transform,colors] duration-200 ease-out hover:bg-(--color-surface) hover:text-(--color-foreground) active:scale-95',
     errorBanner: 'rounded-lg bg-red-50 p-3 text-sm text-red-700',
     label: 'mb-1.5 block text-sm font-medium text-(--color-foreground)',
     input:
@@ -53,16 +53,20 @@ export const campaignFormTv = tv({
     dateGrid: 'grid grid-cols-2 gap-4',
     footer: 'flex gap-3 border-t border-(--color-border) pt-4',
     cancelButton:
-      'rounded-lg border border-(--color-border) px-4 py-2.5 text-sm font-medium transition-colors hover:bg-(--color-surface) focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--color-primary)',
+      'rounded-lg border border-(--color-border) px-4 py-2.5 text-sm font-medium transition-[transform,colors] duration-200 ease-out hover:bg-(--color-surface) active:scale-[0.99] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--color-primary)',
   },
 });
 
 export const campaignListTv = tv({
   slots: {
     root: 'space-y-6',
-    toolbar: 'flex justify-end',
+    toolbar: 'flex flex-wrap items-center gap-3',
+    filterGroup: 'flex flex-1 flex-wrap items-center gap-2',
+    filterSelect:
+      'rounded-lg border border-(--color-border) bg-(--color-background) px-3 py-2 text-sm text-(--color-foreground) transition-colors focus:border-(--color-primary) focus:outline-none focus:ring-2 focus:ring-(--color-primary)/20',
+    activeFilterCount: 'text-xs text-(--color-muted)',
     newButton:
-      'rounded-lg bg-(--color-primary) px-5 py-2.5 text-sm font-medium text-white transition-colors hover:bg-(--color-primary-hover) focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--color-primary)',
+      'rounded-lg bg-(--color-primary) px-5 py-2.5 text-sm font-medium text-white transition-[transform,colors] duration-200 ease-out hover:bg-(--color-primary-hover) active:scale-[0.99] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--color-primary)',
     emptyRoot:
       'rounded-xl bg-(--color-background) p-12 text-center shadow-[--shadow-card]',
     emptyIconWrap:
@@ -81,7 +85,8 @@ export const sponsorPageTv = tv({
     title: 'text-2xl font-bold text-(--color-foreground)',
     subtitle: 'mt-1 text-(--color-muted)',
     statsGrid: 'grid gap-4 sm:grid-cols-2 lg:grid-cols-4',
-    statCard: 'rounded-xl bg-(--color-background) p-5 shadow-[--shadow-card]',
+    statCard:
+      'rounded-xl bg-(--color-background) p-5 shadow-[--shadow-card] transition-[transform,box-shadow] duration-300 ease-out hover:-translate-y-px hover:shadow-[--shadow-card-hover]',
     statLabel: 'text-sm font-medium text-(--color-muted)',
     statValue: 'mt-1 text-2xl font-semibold text-(--color-foreground)',
   },
@@ -127,6 +132,6 @@ export const sponsorErrorTv = tv({
     title: 'mb-2 text-lg font-semibold text-(--color-foreground)',
     body: 'mb-6 text-sm text-(--color-muted)',
     retry:
-      'rounded-lg bg-(--color-primary) px-5 py-2.5 text-sm font-medium text-white transition-colors hover:bg-(--color-primary-hover) focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--color-primary)',
+      'rounded-lg bg-(--color-primary) px-5 py-2.5 text-sm font-medium text-white transition-[transform,colors] duration-200 ease-out hover:bg-(--color-primary-hover) active:scale-[0.99] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--color-primary)',
   },
 });

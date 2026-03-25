@@ -33,7 +33,7 @@ export const navBrandSubtitle = tv({
 });
 
 export const navLink = tv({
-  base: 'rounded-lg px-3 py-2 text-sm font-medium transition-colors focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-(--color-primary)',
+  base: 'rounded-lg px-3 py-2 text-sm font-medium transition-colors duration-150 ease-out focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-(--color-primary)',
   variants: {
     active: {
       true: 'bg-(--color-primary)/12 text-(--color-primary)',
@@ -69,19 +69,19 @@ export const navGuestAuthRoot = tv({
 });
 
 export const navGuestMutedLink = tv({
-  base: 'rounded-lg px-3 py-2 text-sm font-medium text-(--color-muted) transition-colors hover:bg-(--color-surface) hover:text-(--color-foreground) focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-(--color-primary)',
+  base: 'rounded-lg px-3 py-2 text-sm font-medium text-(--color-muted) transition-[transform,colors] duration-200 ease-out hover:bg-(--color-surface) hover:text-(--color-foreground) active:scale-[0.99] focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-(--color-primary)',
 });
 
 export const navGuestPrimaryLink = tv({
-  base: 'rounded-lg bg-(--color-primary) px-4 py-2 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-(--color-primary-hover) focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-(--color-primary)',
+  base: 'rounded-lg bg-(--color-primary) px-4 py-2 text-sm font-semibold text-white shadow-sm transition-[transform,colors] duration-200 ease-out hover:bg-(--color-primary-hover) active:scale-[0.98] focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-(--color-primary)',
 });
 
 export const navGuestMobileOutlineLink = tv({
-  base: 'flex w-full items-center justify-center rounded-lg border border-(--color-border) py-2.5 text-sm font-medium focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-(--color-primary)',
+  base: 'flex w-full items-center justify-center rounded-lg border border-(--color-border) py-2.5 text-sm font-medium transition-[transform,colors] duration-200 ease-out active:scale-[0.99] focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-(--color-primary)',
 });
 
 export const navGuestMobilePrimaryLink = tv({
-  base: 'flex w-full items-center justify-center rounded-lg bg-(--color-primary) py-2.5 text-sm font-semibold text-white focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-(--color-primary)',
+  base: 'flex w-full items-center justify-center rounded-lg bg-(--color-primary) py-2.5 text-sm font-semibold text-white transition-[transform,colors] duration-200 ease-out hover:bg-(--color-primary-hover) active:scale-[0.99] focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-(--color-primary)',
 });
 
 export const navSignOutButton = tv({
@@ -89,8 +89,9 @@ export const navSignOutButton = tv({
   variants: {
     variant: {
       desktop:
-        'rounded-lg border border-(--color-border) px-3 py-2 text-(--color-muted) transition-colors hover:border-(--color-foreground)/20 hover:bg-(--color-surface) hover:text-(--color-foreground)',
-      mobile: 'w-full rounded-lg border border-(--color-border) py-2.5 text-(--color-foreground)',
+        'rounded-lg border border-(--color-border) px-3 py-2 text-(--color-muted) transition-[transform,colors] duration-200 ease-out hover:border-(--color-foreground)/20 hover:bg-(--color-surface) hover:text-(--color-foreground) active:scale-[0.99]',
+      mobile:
+        'w-full rounded-lg border border-(--color-border) py-2.5 text-(--color-foreground) transition-[transform,colors] duration-200 ease-out active:scale-[0.99]',
     },
   },
 });
@@ -138,19 +139,19 @@ export const navMobileTrailingRoot = tv({
 });
 
 export const navMobileCompactLogin = tv({
-  base: 'rounded-lg bg-(--color-primary) px-3 py-2 text-sm font-semibold text-white focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-(--color-primary)',
+  base: 'rounded-lg bg-(--color-primary) px-3 py-2 text-sm font-semibold text-white transition-[transform,colors] duration-200 ease-out hover:bg-(--color-primary-hover) active:scale-[0.98] focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-(--color-primary)',
 });
 
 export const navMenuButton = tv({
-  base: 'inline-flex h-10 w-10 items-center justify-center rounded-lg border border-(--color-border) text-(--color-foreground) transition-colors hover:bg-(--color-surface) focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-(--color-primary) md:hidden',
+  base: 'inline-flex h-10 w-10 items-center justify-center rounded-lg border border-(--color-border) text-(--color-foreground) transition-[transform,colors] duration-200 ease-out hover:bg-(--color-surface) active:scale-95 focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-(--color-primary) md:hidden',
 });
 
 export const navMobileBackdrop = tv({
-  base: 'fixed inset-0 z-40 bg-(--color-foreground)/15 backdrop-blur-[2px] md:hidden',
+  base: 'fixed inset-0 z-40 bg-(--color-foreground)/15 backdrop-blur-[2px] transition-opacity duration-200 ease-out md:hidden',
 });
 
 export const navMobileSheetPanel = tv({
-  base: 'relative z-50 border-t border-(--color-border) bg-(--color-background) px-4 py-4 shadow-[--shadow-lg] md:hidden',
+  base: 'relative z-50 origin-top border-t border-(--color-border) bg-(--color-background) px-4 py-4 shadow-[--shadow-lg] animate-fade-in-up transition-[transform,opacity] duration-200 ease-out md:hidden',
 });
 
 export const navMobileSheetSignedInSection = tv({

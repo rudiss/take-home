@@ -8,7 +8,7 @@ import { QuoteRequestDialog } from '../../components/quote-request-dialog';
 import { IconCheckCircle, IconShieldCheck } from '../../components/marketplace-icons';
 import { trackMarketplaceEvent } from '@/lib/conversion-events';
 import { formatSlotTypeLabel, slotValueBullets } from '@/lib/marketplace-ux';
-import { getAdSlot } from '@/lib/api';
+import { getMarketplaceAdSlot } from '@/lib/api';
 import { authClient } from '@/auth-client';
 import { logger } from '@/lib/utils';
 import type { AdSlot } from '@/lib/types';
@@ -53,7 +53,7 @@ export function AdSlotDetail({ id }: Readonly<Props>) {
   const [bookingError, setBookingError] = useState<string | null>(null);
 
   useEffect(() => {
-    getAdSlot(id)
+    getMarketplaceAdSlot(id)
       .then((slot) => {
         setAdSlot(slot);
         trackMarketplaceEvent({ name: 'listing_detail_view', slotId: slot.id });

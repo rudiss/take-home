@@ -1,6 +1,6 @@
 'use client';
 
-import { useActionState, useEffect, type RefObject } from 'react';
+import { useActionState, useEffect } from 'react';
 import type { AdSlot } from '@/lib/types';
 import type { DashboardActionState } from '../../action-types';
 import { createAdSlotAction, updateAdSlotAction } from '../actions';
@@ -9,28 +9,21 @@ import { publisherFormTv } from '../publisher-dashboard.styles';
 
 interface AdSlotFormProps {
   adSlot?: AdSlot;
-  onClose: () => void;
-  dialogRef?: RefObject<HTMLDialogElement | null>;
+  onClose: (succeeded?: boolean) => void;
 }
 
 const initialState: DashboardActionState = {};
 
-export function AdSlotForm({ adSlot, onClose, dialogRef }: Readonly<AdSlotFormProps>) {
+export function AdSlotForm({ adSlot, onClose }: Readonly<AdSlotFormProps>) {
   const action = adSlot ? updateAdSlotAction : createAdSlotAction;
   const [state, formAction] = useActionState(action, initialState);
   const form = publisherFormTv();
 
   useEffect(() => {
-    if (state.success) {
-      dialogRef?.current?.close();
-      onClose();
-    }
-  }, [state.success, onClose, dialogRef]);
+    if (state.success) onClose(true);
+  }, [state.success, onClose]);
 
-  const handleClose = () => {
-    dialogRef?.current?.close();
-    onClose();
-  };
+  const handleClose = () => onClose();
 
   return (
     <form action={formAction} className={form.root()}>

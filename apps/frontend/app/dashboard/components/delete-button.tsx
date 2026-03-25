@@ -3,6 +3,7 @@
 import { useActionState, useEffect, useId, useRef } from 'react';
 import type { DashboardActionState } from '../action-types';
 import { deleteButtonTriggerTv, deleteDialogTv } from '../dashboard-shared.styles';
+import { closeDialogAnimated } from '../utils/close-dialog';
 
 interface DeleteButtonProps {
   action: (
@@ -17,6 +18,8 @@ interface DeleteButtonProps {
   triggerTone?: 'default' | 'dark';
   /** Override trigger button styles (e.g. dark dashboard). */
   triggerClassName?: string;
+  /** Called after successful deletion. */
+  onSuccess?: () => void;
 }
 
 export function DeleteButton({
@@ -26,6 +29,7 @@ export function DeleteButton({
   itemLabel,
   triggerTone = 'default',
   triggerClassName,
+  onSuccess,
 }: Readonly<DeleteButtonProps>) {
   const dialogRef = useRef<HTMLDialogElement>(null);
   const titleId = useId();
@@ -35,9 +39,9 @@ export function DeleteButton({
 
   useEffect(() => {
     if (state.success) {
-      dialogRef.current?.close();
+      closeDialogAnimated(dialogRef, () => onSuccess?.());
     }
-  }, [state.success]);
+  }, [state.success, onSuccess]);
 
   const triggerClass =
     triggerClassName ?? deleteButtonTriggerTv({ tone: triggerTone });
@@ -68,7 +72,7 @@ export function DeleteButton({
           <button
             type="button"
             className={dlg.cancel()}
-            onClick={() => dialogRef.current?.close()}
+            onClick={() => closeDialogAnimated(dialogRef)}
           >
             Cancel
           </button>

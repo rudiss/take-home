@@ -29,6 +29,122 @@
   --shadow-card: 0 1px 3px rgb(0 0 0 / 0.06), 0 1px 2px rgb(0 0 0 / 0.04);
   --shadow-card-hover: 0 4px 12px rgb(0 0 0 / 0.08);
   --shadow-lg: 0 10px 25px rgb(0 0 0 / 0.1);
+
+  /* Motion (CSS-first; Tailwind classes can reference these where useful) */
+  --motion-duration-fast: 150ms;
+  --motion-duration: 220ms;
+  --motion-duration-slow: 320ms;
+  --motion-ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
+  --motion-ease-emphasis: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@keyframes motion-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes motion-fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes motion-page-enter {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes motion-dialog-in {
+  from {
+    opacity: 0;
+    transform: scale(0.97) translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes motion-dialog-out {
+  from {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.97) translateY(6px);
+  }
+}
+
+@keyframes motion-backdrop-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes motion-backdrop-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+.animate-fade-in {
+  animation: motion-fade-in var(--motion-duration) var(--motion-ease-standard) both;
+}
+
+.animate-fade-in-up {
+  animation: motion-fade-in-up var(--motion-duration-slow) var(--motion-ease-emphasis) both;
+}
+
+.animate-page-enter {
+  animation: motion-page-enter var(--motion-duration-slow) var(--motion-ease-emphasis) both;
+}
+
+.motion-transition-transform {
+  transition-property: transform;
+  transition-duration: var(--motion-duration-fast);
+  transition-timing-function: var(--motion-ease-standard);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-fade-in,
+  .animate-fade-in-up,
+  .animate-page-enter {
+    animation: none !important;
+  }
+
+  .motion-transition-transform {
+    transition-duration: 0.01ms !important;
+  }
+
+  dialog[open] {
+    animation: none !important;
+  }
+
+  dialog::backdrop {
+    animation: none !important;
+  }
 }
 
 .dark {
@@ -51,7 +167,9 @@ body {
 input:not([type='checkbox']):not([type='radio']),
 textarea,
 select {
-  transition: border-color 0.15s, box-shadow 0.15s;
+  transition:
+    border-color var(--motion-duration-fast) var(--motion-ease-standard),
+    box-shadow var(--motion-duration-fast) var(--motion-ease-standard);
 }
 
 input:not([type='checkbox']):not([type='radio']):focus,
@@ -74,7 +192,22 @@ dialog:modal {
   overflow: auto;
 }
 
+/* Native dialog open polish (delete confirm, quote request, etc.) */
+dialog[open] {
+  animation: motion-dialog-in var(--motion-duration) var(--motion-ease-emphasis) both;
+}
+
 dialog::backdrop {
   background-color: rgb(0 0 0 / 0.5);
   backdrop-filter: blur(4px);
+  animation: motion-backdrop-in var(--motion-duration-fast) var(--motion-ease-standard) both;
+}
+
+/* Dialog closing animation (triggered via data-closing attribute) */
+dialog[data-closing] {
+  animation: motion-dialog-out 180ms var(--motion-ease-standard) both;
+}
+
+dialog[data-closing]::backdrop {
+  animation: motion-backdrop-out 180ms var(--motion-ease-standard) both;
 }

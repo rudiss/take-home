@@ -8,9 +8,10 @@ import { campaignCardTv, campaignStatusBadgeTv } from '../sponsor-dashboard.styl
 interface CampaignCardProps {
   campaign: Campaign;
   onEdit: (campaign: Campaign) => void;
+  onDeleted?: () => void;
 }
 
-export function CampaignCard({ campaign, onEdit }: Readonly<CampaignCardProps>) {
+export function CampaignCard({ campaign, onEdit, onDeleted }: Readonly<CampaignCardProps>) {
   const budget = Number(campaign.budget);
   const spent = Number(campaign.spent);
   const progress = budget > 0 ? (spent / budget) * 100 : 0;
@@ -54,7 +55,7 @@ export function CampaignCard({ campaign, onEdit }: Readonly<CampaignCardProps>) 
         <button type="button" onClick={() => onEdit(campaign)} className={card.editButton()}>
           Edit
         </button>
-        <DeleteButton action={deleteCampaignAction} id={campaign.id} itemLabel={campaign.name} />
+        <DeleteButton action={deleteCampaignAction} id={campaign.id} itemLabel={campaign.name} onSuccess={onDeleted} />
       </div>
     </article>
   );
