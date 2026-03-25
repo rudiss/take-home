@@ -1,40 +1,90 @@
-// TODO: This should be a marketing landing page, not just a simple welcome screen
-// TODO: Add proper metadata for SEO (title, description, Open Graph)
-// TODO: Add hero section, features, testimonials, etc.
-// HINT: Check out the bonus challenge for marketing landing page!
+import type { Metadata } from 'next';
+import { Plus_Jakarta_Sans } from 'next/font/google';
+import { LandingPage } from './components/landing/landing-page';
+import { getSiteUrl } from '@/lib/site-url';
+
+const siteUrl = getSiteUrl();
+
+const description =
+  'Anvara is the sponsorship marketplace where brands discover premium placements and publishers monetize inventory—direct relationships, transparent pricing, and a smooth path from browse to booked.';
+
+export const metadata: Metadata = {
+  title: 'Anvara — Sponsorship marketplace for brands & publishers',
+  description,
+  keywords: [
+    'sponsorship marketplace',
+    'publisher advertising',
+    'brand partnerships',
+    'ad placements',
+    'sponsors',
+    'newsletter sponsorships',
+    'podcast ads',
+  ],
+  authors: [{ name: 'Anvara' }],
+  creator: 'Anvara',
+  openGraph: {
+    type: 'website',
+    locale: 'en_US',
+    url: siteUrl,
+    siteName: 'Anvara',
+    title: 'Anvara — Sponsorship marketplace for brands & publishers',
+    description,
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Anvara — Sponsorship marketplace for brands & publishers',
+    description,
+  },
+  alternates: {
+    canonical: '/',
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+    },
+  },
+};
+
+const landingFont = Plus_Jakarta_Sans({
+  subsets: ['latin'],
+  display: 'swap',
+});
 
 export default function Home() {
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'WebSite',
+        '@id': `${siteUrl}/#website`,
+        url: siteUrl,
+        name: 'Anvara',
+        description,
+        publisher: { '@id': `${siteUrl}/#organization` },
+        inLanguage: 'en-US',
+      },
+      {
+        '@type': 'Organization',
+        '@id': `${siteUrl}/#organization`,
+        name: 'Anvara',
+        url: siteUrl,
+        description,
+      },
+    ],
+  };
+
   return (
-    <div className="flex min-h-[60vh] flex-col items-center justify-center text-center">
-      <h1 className="mb-4 text-4xl font-bold">Welcome to Anvara</h1>
-      <p className="mb-8 max-w-md text-[--color-muted]">
-        The sponsorship marketplace connecting sponsors with publishers.
-      </p>
-
-      <div className="flex gap-4">
-        <a
-          href="/login"
-          className="rounded-lg bg-[--color-primary] px-6 py-3 text-white hover:bg-[--color-primary-hover]"
-        >
-          Get Started
-        </a>
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <div className={landingFont.className}>
+        <LandingPage />
       </div>
-
-      <div className="mt-16 grid gap-8 text-left sm:grid-cols-2">
-        <div className="rounded-lg border border-[--color-border] p-6">
-          <h2 className="mb-2 text-lg font-semibold text-[--color-primary]">For Sponsors</h2>
-          <p className="text-sm text-[--color-muted]">
-            Create campaigns, set budgets, and reach your target audience through premium
-            publishers.
-          </p>
-        </div>
-        <div className="rounded-lg border border-[--color-border] p-6">
-          <h2 className="mb-2 text-lg font-semibold text-[--color-secondary]">For Publishers</h2>
-          <p className="text-sm text-[--color-muted]">
-            List your ad slots, set your rates, and connect with sponsors looking for your audience.
-          </p>
-        </div>
-      </div>
-    </div>
+    </>
   );
 }

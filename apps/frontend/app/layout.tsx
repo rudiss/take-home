@@ -3,12 +3,33 @@ import type { ReactNode } from 'react';
 import { Inter } from 'next/font/google';
 import './globals.css';
 import { Nav } from './components/nav';
+import { getSiteUrl } from '@/lib/site-url';
 
 const inter = Inter({ subsets: ['latin'], display: 'swap' });
 
+const defaultDescription =
+  'Sponsorship marketplace connecting sponsors with publishers—browse placements, book inventory, and grow partnerships.';
+
 export const metadata: Metadata = {
-  title: 'Anvara Marketplace',
-  description: 'Sponsorship marketplace connecting sponsors with publishers',
+  metadataBase: new URL(getSiteUrl()),
+  title: {
+    default: 'Anvara Marketplace',
+    template: '%s | Anvara',
+  },
+  description: defaultDescription,
+  applicationName: 'Anvara',
+  openGraph: {
+    type: 'website',
+    locale: 'en_US',
+    siteName: 'Anvara',
+    title: 'Anvara Marketplace',
+    description: defaultDescription,
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Anvara Marketplace',
+    description: defaultDescription,
+  },
 };
 
 export default function RootLayout({ children }: Readonly<{ children: ReactNode }>) {
