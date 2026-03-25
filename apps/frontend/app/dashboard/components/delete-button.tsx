@@ -43,7 +43,7 @@ export function DeleteButton({
 
       <dialog
         ref={dialogRef}
-        className="z-[200] rounded-lg border border-[--color-border] bg-[--color-background] p-4 shadow-xl"
+        className="z-[200] rounded-xl border border-[--color-border] bg-[--color-background] p-6 shadow-[--shadow-lg]"
         aria-labelledby={titleId}
         aria-describedby={descId}
       >
@@ -56,11 +56,11 @@ export function DeleteButton({
             : 'Are you sure you want to delete this? This cannot be undone.'}
         </p>
 
-        <form action={formAction} className="mt-4 flex flex-wrap items-center justify-end gap-2">
+        <form action={formAction} className="mt-6 flex items-center justify-end gap-3">
           <input type="hidden" name="id" value={id} />
           <button
             type="button"
-            className="rounded border border-[--color-border] px-3 py-1.5 text-sm hover:bg-gray-50"
+            className="rounded-lg border border-[--color-border] px-4 py-2 text-sm font-medium transition-colors hover:bg-[--color-surface]"
             onClick={() => dialogRef.current?.close()}
           >
             Cancel
@@ -69,7 +69,7 @@ export function DeleteButton({
             type="submit"
             disabled={pending}
             aria-busy={pending}
-            className="rounded bg-red-600 px-3 py-1.5 text-sm text-white hover:bg-red-700 disabled:opacity-50"
+            className="rounded-lg bg-red-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-red-700 disabled:opacity-50"
           >
             {pending ? 'Deleting…' : 'Delete'}
           </button>

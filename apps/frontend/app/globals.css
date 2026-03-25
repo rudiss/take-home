@@ -1,16 +1,9 @@
 @import 'tailwindcss';
 
-/*
- * Tailwind CSS v4 - CSS-first configuration
- * No tailwind.config.js needed! Use CSS custom properties for theming.
- * Modern 2026 best practices: Oxide engine for faster builds, CSS vars for themes.
- */
-
-/* Custom theme variables - modify these to customize the marketplace look */
 :root {
   /* Primary brand colors */
-  --color-primary: #6366f1;
-  --color-primary-hover: #4f46e5;
+  --color-primary: #4f46e5;
+  --color-primary-hover: #4338ca;
   --color-primary-light: #818cf8;
 
   /* Secondary colors */
@@ -19,46 +12,56 @@
 
   /* Neutral colors */
   --color-background: #ffffff;
-  --color-foreground: #0f172a;
-  --color-muted: #64748b;
-  --color-border: #e2e8f0;
+  --color-foreground: #111827;
+  --color-muted: #6b7280;
+  --color-border: #e5e7eb;
+  --color-surface: #f9fafb;
 
   /* Status colors */
   --color-success: #22c55e;
   --color-warning: #f59e0b;
   --color-error: #ef4444;
 
-  /* Spacing */
-  --spacing-container: 1rem;
+  /* Shadows */
+  --shadow-card: 0 1px 3px rgb(0 0 0 / 0.06), 0 1px 2px rgb(0 0 0 / 0.04);
+  --shadow-card-hover: 0 4px 12px rgb(0 0 0 / 0.08);
+  --shadow-lg: 0 10px 25px rgb(0 0 0 / 0.1);
 }
 
-/* Dark mode support - TODO: Implement dark mode toggle */
 @media (prefers-color-scheme: dark) {
   :root {
-    --color-background: #0f172a;
-    --color-foreground: #f8fafc;
-    --color-muted: #94a3b8;
-    --color-border: #334155;
+    --color-background: #111827;
+    --color-foreground: #f9fafb;
+    --color-muted: #9ca3af;
+    --color-border: #374151;
+    --color-surface: #1f2937;
+    --shadow-card: 0 1px 3px rgb(0 0 0 / 0.2);
+    --shadow-card-hover: 0 4px 12px rgb(0 0 0 / 0.3);
+    --shadow-lg: 0 10px 25px rgb(0 0 0 / 0.4);
   }
 }
 
-/* Base styles */
 body {
-  background-color: var(--color-background);
+  background-color: var(--color-surface);
   color: var(--color-foreground);
-  font-family:
-    system-ui,
-    -apple-system,
-    BlinkMacSystemFont,
-    'Segoe UI',
-    Roboto,
-    sans-serif;
 }
 
-/*
- * Native <dialog> opened with showModal() — Tailwind preflight zeroes margins and
- * breaks the default centered placement; this restores a viewport-centered modal.
- */
+/* Form inputs */
+input:not([type='checkbox']):not([type='radio']),
+textarea,
+select {
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+input:not([type='checkbox']):not([type='radio']):focus,
+textarea:focus,
+select:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgb(79 70 229 / 0.1);
+}
+
+/* Native dialog */
 dialog:modal {
   position: fixed;
   inset: 0;
@@ -71,12 +74,6 @@ dialog:modal {
 }
 
 dialog::backdrop {
-  background-color: rgb(0 0 0 / 0.45);
+  background-color: rgb(0 0 0 / 0.5);
+  backdrop-filter: blur(4px);
 }
-
-/*
- * HINT: Use Tailwind v4 arbitrary values with CSS vars:
- * - bg-[--color-primary] for custom backgrounds
- * - text-[--color-foreground] for custom text colors
- * - p-[--spacing-container] for custom spacing
- */

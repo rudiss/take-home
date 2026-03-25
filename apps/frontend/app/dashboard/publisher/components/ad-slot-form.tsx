@@ -21,35 +21,42 @@ export function AdSlotForm({ adSlot, onClose }: Readonly<AdSlotFormProps>) {
     if (state.success) onClose();
   }, [state.success, onClose]);
 
+  const inputClass =
+    'w-full rounded-lg border border-[--color-border] bg-[--color-background] px-3 py-2.5 text-sm transition-colors placeholder:text-[--color-muted]';
+
   return (
-    <form action={formAction} className="space-y-4 rounded-lg border border-[--color-border] p-4">
-      <h3 className="font-semibold">{adSlot ? 'Edit Ad Slot' : 'New Ad Slot'}</h3>
+    <form
+      action={formAction}
+      className="space-y-5 rounded-xl bg-[--color-background] p-6 shadow-[--shadow-card]"
+    >
+      <div className="border-b border-[--color-border] pb-4">
+        <h3 className="text-lg font-semibold">{adSlot ? 'Edit Ad Slot' : 'New Ad Slot'}</h3>
+      </div>
 
       {state.error && (
-        <div className="rounded border border-red-200 bg-red-50 p-2 text-sm text-red-600">
-          {state.error}
-        </div>
+        <div className="rounded-lg bg-red-50 p-3 text-sm text-red-700">{state.error}</div>
       )}
 
       {adSlot && <input type="hidden" name="id" value={adSlot.id} />}
 
       <div>
-        <label htmlFor="name" className="mb-1 block text-sm font-medium">
+        <label htmlFor="name" className="mb-1.5 block text-sm font-medium">
           Name
         </label>
         <input
           id="name"
           name="name"
           defaultValue={adSlot?.name}
-          className="w-full rounded border border-[--color-border] px-3 py-2 text-sm"
+          placeholder="Ad slot name"
+          className={inputClass}
         />
         {state.fieldErrors?.name && (
-          <p className="mt-1 text-xs text-red-600">{state.fieldErrors.name}</p>
+          <p className="mt-1.5 text-xs text-red-600">{state.fieldErrors.name}</p>
         )}
       </div>
 
       <div>
-        <label htmlFor="description" className="mb-1 block text-sm font-medium">
+        <label htmlFor="description" className="mb-1.5 block text-sm font-medium">
           Description
         </label>
         <textarea
@@ -57,21 +64,17 @@ export function AdSlotForm({ adSlot, onClose }: Readonly<AdSlotFormProps>) {
           name="description"
           rows={2}
           defaultValue={adSlot?.description}
-          className="w-full rounded border border-[--color-border] px-3 py-2 text-sm"
+          placeholder="Brief description..."
+          className={inputClass}
         />
       </div>
 
       <div className="grid grid-cols-2 gap-4">
         <div>
-          <label htmlFor="type" className="mb-1 block text-sm font-medium">
+          <label htmlFor="type" className="mb-1.5 block text-sm font-medium">
             Type
           </label>
-          <select
-            id="type"
-            name="type"
-            defaultValue={adSlot?.type ?? ''}
-            className="w-full rounded border border-[--color-border] px-3 py-2 text-sm"
-          >
+          <select id="type" name="type" defaultValue={adSlot?.type ?? ''} className={inputClass}>
             <option value="">Select type...</option>
             <option value="DISPLAY">Display</option>
             <option value="VIDEO">Video</option>
@@ -80,11 +83,11 @@ export function AdSlotForm({ adSlot, onClose }: Readonly<AdSlotFormProps>) {
             <option value="PODCAST">Podcast</option>
           </select>
           {state.fieldErrors?.type && (
-            <p className="mt-1 text-xs text-red-600">{state.fieldErrors.type}</p>
+            <p className="mt-1.5 text-xs text-red-600">{state.fieldErrors.type}</p>
           )}
         </div>
         <div>
-          <label htmlFor="basePrice" className="mb-1 block text-sm font-medium">
+          <label htmlFor="basePrice" className="mb-1.5 block text-sm font-medium">
             Base Price ($/mo)
           </label>
           <input
@@ -94,20 +97,21 @@ export function AdSlotForm({ adSlot, onClose }: Readonly<AdSlotFormProps>) {
             min="0"
             step="0.01"
             defaultValue={adSlot ? Number(adSlot.basePrice) : undefined}
-            className="w-full rounded border border-[--color-border] px-3 py-2 text-sm"
+            placeholder="0.00"
+            className={inputClass}
           />
           {state.fieldErrors?.basePrice && (
-            <p className="mt-1 text-xs text-red-600">{state.fieldErrors.basePrice}</p>
+            <p className="mt-1.5 text-xs text-red-600">{state.fieldErrors.basePrice}</p>
           )}
         </div>
       </div>
 
-      <div className="flex gap-2">
+      <div className="flex gap-3 border-t border-[--color-border] pt-4">
         <SubmitButton label={adSlot ? 'Update' : 'Create'} pendingLabel="Saving..." />
         <button
           type="button"
           onClick={onClose}
-          className="rounded border border-[--color-border] px-4 py-2 text-sm hover:bg-gray-50"
+          className="rounded-lg border border-[--color-border] px-4 py-2.5 text-sm font-medium transition-colors hover:bg-[--color-surface]"
         >
           Cancel
         </button>

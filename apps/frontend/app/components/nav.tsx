@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { authClient } from '@/auth-client';
 
@@ -11,13 +12,29 @@ interface RoleForUser {
   role: UserRole;
 }
 
+function NavLink({ href, children }: Readonly<{ href: string; children: React.ReactNode }>) {
+  const pathname = usePathname();
+  const isActive = pathname === href || pathname.startsWith(href + '/');
+
+  return (
+    <Link
+      href={href}
+      className={`text-sm font-medium transition-colors ${
+        isActive
+          ? 'text-[--color-primary]'
+          : 'text-[--color-muted] hover:text-[--color-foreground]'
+      }`}
+    >
+      {children}
+    </Link>
+  );
+}
+
 export function Nav() {
   const { data: session, isPending } = authClient.useSession();
   const user = session?.user;
   const [roleForUser, setRoleForUser] = useState<RoleForUser | null>(null);
 
-  // TODO: Convert to server component and fetch role server-side
-  // Fetch user role from backend when user is logged in
   useEffect(() => {
     if (!user?.id) return;
 
@@ -25,7 +42,7 @@ export function Nav() {
     let cancelled = false;
 
     fetch(
-      `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4291'}/api/auth/role/${userId}`
+      `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4291'}/api/auth/role/${userId}`,
     )
       .then((res) => res.json())
       .then((data: { role: UserRole }) => {
@@ -43,47 +60,34 @@ export function Nav() {
   const role: UserRole =
     user?.id && roleForUser?.userId === user.id ? roleForUser.role : null;
 
-  // TODO: Add active link styling using usePathname() from next/navigation
-  // The current page's link should be highlighted differently
-
   return (
-    <header className="border-b border-[--color-border]">
-      <nav className="mx-auto flex max-w-6xl items-center justify-between p-4">
-        <Link href="/" className="text-xl font-bold text-[--color-primary]">
+    <header className="sticky top-0 z-50 border-b border-[--color-border] bg-[--color-background]/95 backdrop-blur-sm">
+      <nav className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4">
+        <Link href="/" className="text-xl font-bold tracking-tight text-[--color-primary]">
           Anvara
         </Link>
 
         <div className="flex items-center gap-6">
-          <Link
-            href="/marketplace"
-            className="text-[--color-muted] hover:text-[--color-foreground]"
-          >
-            Marketplace
-          </Link>
+          <NavLink href="/marketplace">Marketplace</NavLink>
 
           {user && role === 'sponsor' && (
-            <Link
-              href="/dashboard/sponsor"
-              className="text-[--color-muted] hover:text-[--color-foreground]"
-            >
-              My Campaigns
-            </Link>
+            <NavLink href="/dashboard/sponsor">My Campaigns</NavLink>
           )}
           {user && role === 'publisher' && (
-            <Link
-              href="/dashboard/publisher"
-              className="text-[--color-muted] hover:text-[--color-foreground]"
-            >
-              My Ad Slots
-            </Link>
+            <NavLink href="/dashboard/publisher">My Ad Slots</NavLink>
           )}
 
           {isPending ? (
-            <span className="text-[--color-muted]">...</span>
+            <span className="text-sm text-[--color-muted]">...</span>
           ) : user ? (
             <div className="flex items-center gap-4">
               <span className="text-sm text-[--color-muted]">
-                {user.name} {role && `(${role})`}
+                {user.name}
+                {role && (
+                  <span className="ml-1.5 rounded-full bg-[--color-primary]/10 px-2 py-0.5 text-xs font-medium text-[--color-primary]">
+                    {role}
+                  </span>
+                )}
               </span>
               <button
                 onClick={async () => {
@@ -95,7 +99,7 @@ export function Nav() {
                     },
                   });
                 }}
-                className="rounded bg-gray-600 px-3 py-1.5 text-sm text-white hover:bg-gray-500"
+                className="rounded-lg border border-[--color-border] px-3 py-1.5 text-sm text-[--color-muted] transition-colors hover:border-[--color-foreground]/20 hover:text-[--color-foreground]"
               >
                 Logout
               </button>
@@ -103,7 +107,7 @@ export function Nav() {
           ) : (
             <Link
               href="/login"
-              className="rounded bg-[--color-primary] px-4 py-2 text-sm text-white hover:bg-[--color-primary-hover]"
+              className="rounded-lg bg-[--color-primary] px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-[--color-primary-hover]"
             >
               Login
             </Link>
